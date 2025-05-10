@@ -1,11 +1,9 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 public class Frete {
 
     @Id
@@ -24,4 +22,85 @@ public class Frete {
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private EmpresaCliente empresaCliente;
+    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
+    }
+
+    public String getTipoCarga() {
+        return tipoCarga;
+    }
+
+    public void setTipoCarga(String tipoCarga) {
+        this.tipoCarga = tipoCarga;
+    }
+
+    public Double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(Double peso) {
+        this.peso = peso;
+    }
+
+    public String getDimensoes() {
+        return dimensoes;
+    }
+
+    public void setDimensoes(String dimensoes) {
+        this.dimensoes = dimensoes;
+    }
+
+    public LocalDateTime getPrazoEntrega() {
+        return prazoEntrega;
+    }
+
+    public void setPrazoEntrega(LocalDateTime prazoEntrega) {
+        this.prazoEntrega = prazoEntrega;
+    }
+
+    public String getDescricaoCarga() {
+        return descricaoCarga;
+    }
+
+    public void setDescricaoCarga(String descricaoCarga) {
+        this.descricaoCarga = descricaoCarga;
+    }
+
+    public Double getValorFrete() {
+        return valorFrete;
+    }
+
+    public void setValorFrete(Double valorFrete) {
+        this.valorFrete = valorFrete;
+    }
+
+    public EmpresaCliente getEmpresaCliente() {
+        return empresaCliente;
+    }
+
+    public void setEmpresaCliente(EmpresaCliente empresaCliente) {
+        this.empresaCliente = empresaCliente;
+    }
 }
