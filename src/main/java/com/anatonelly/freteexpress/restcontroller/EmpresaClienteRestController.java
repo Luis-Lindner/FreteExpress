@@ -1,4 +1,4 @@
-package com.anatonelly.freteexpress.controller;
+package com.anatonelly.freteexpress.restcontroller;
 
 import com.anatonelly.freteexpress.model.EmpresaCliente;
 import com.anatonelly.freteexpress.service.EmpresaClienteService;
@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/empresas")
-public class EmpresaClienteController {
+public class EmpresaClienteRestController {
 
     private final EmpresaClienteService service;
 
-    public EmpresaClienteController(EmpresaClienteService service) {
+    public EmpresaClienteRestController(EmpresaClienteService service) {
         this.service = service;
     }
 
