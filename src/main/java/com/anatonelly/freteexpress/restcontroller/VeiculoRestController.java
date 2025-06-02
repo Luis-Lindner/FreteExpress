@@ -1,4 +1,4 @@
-package com.anatonelly.freteexpress.controller;
+package com.anatonelly.freteexpress.restcontroller;
 
 import com.anatonelly.freteexpress.model.Veiculo;
 import com.anatonelly.freteexpress.service.VeiculoService;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/veiculos")
-public class VeiculoController {
+public class VeiculoRestController {
 
     @Autowired
     private VeiculoService veiculoService;

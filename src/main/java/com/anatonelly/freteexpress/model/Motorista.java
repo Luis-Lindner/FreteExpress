@@ -1,6 +1,10 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+import java.util.Objects;
 
 @Entity
 public class Motorista {
@@ -9,26 +13,72 @@ public class Motorista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-    private String senha;
-    private String nomeCompleto;
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "CPF é obrigatório")
     private String cpf;
-    private String enderecoCompleto;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Nome completo é obrigatório")
+    private String nomeCompleto;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
+    private String email;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Senha é obrigatória")
+    private String senha;
+
+    private String endereco;
     private String celular;
-    private String cnh;
-    private String numeroAntt;
-    private byte[] imagemPerfil;
+    private String cidade;
+    private String estado;
 
-    @OneToOne(mappedBy = "motorista", cascade = CascadeType.ALL)
-    private Veiculo veiculo;
+    // Construtor vazio (substitui @NoArgsConstructor)
+    public Motorista(String number, String testeMotoristaMySQL, String mail, String senha123) {
+    }
 
+    // Construtor parametrizado (já existente)
+    public Motorista(Long id, String cpf, String nomeCompleto, String email, String senha, String endereco, String celular, String cidade, String estado) {
+        this.id = id;
+        this.cpf = cpf;
+        this.nomeCompleto = nomeCompleto;
+        this.email = email;
+        this.senha = senha;
+        this.endereco = endereco;
+        this.celular = celular;
+        this.cidade = cidade;
+        this.estado = estado;
+    }
 
+    public Motorista() {
+
+    }
+
+    // Getters e Setters (substitui @Data)
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getNomeCompleto() {
+        return nomeCompleto;
+    }
+
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
     public String getEmail() {
@@ -47,28 +97,12 @@ public class Motorista {
         this.senha = senha;
     }
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEnderecoCompleto() {
-        return enderecoCompleto;
-    }
-
-    public void setEnderecoCompleto(String enderecoCompleto) {
-        this.enderecoCompleto = enderecoCompleto;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public String getCelular() {
@@ -79,36 +113,57 @@ public class Motorista {
         this.celular = celular;
     }
 
-    public String getCnh() {
-        return cnh;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setCnh(String cnh) {
-        this.cnh = cnh;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
-    public String getNumeroAntt() {
-        return numeroAntt;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setNumeroAntt(String numeroAntt) {
-        this.numeroAntt = numeroAntt;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public byte[] getImagemPerfil() {
-        return imagemPerfil;
+    // toString (substitui @Data)
+    @Override
+    public String toString() {
+        return "Motorista{" +
+                "id=" + id +
+                ", cpf='" + cpf + '\'' +
+                ", nomeCompleto='" + nomeCompleto + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", endereco='" + endereco + '\'' +
+                ", celular='" + celular + '\'' +
+                ", cidade='" + cidade + '\'' +
+                ", estado='" + estado + '\'' +
+                '}';
     }
 
-    public void setImagemPerfil(byte[] imagemPerfil) {
-        this.imagemPerfil = imagemPerfil;
+    // equals e hashCode (substitui @Data)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Motorista motorista = (Motorista) o;
+        return Objects.equals(id, motorista.id) &&
+                Objects.equals(cpf, motorista.cpf) &&
+                Objects.equals(nomeCompleto, motorista.nomeCompleto) &&
+                Objects.equals(email, motorista.email) &&
+                Objects.equals(senha, motorista.senha) &&
+                Objects.equals(endereco, motorista.endereco) &&
+                Objects.equals(celular, motorista.celular) &&
+                Objects.equals(cidade, motorista.cidade) &&
+                Objects.equals(estado, motorista.estado);
     }
 
-    public Veiculo getVeiculo() {
-        return veiculo;
-    }
-
-    public void setVeiculo(Veiculo veiculo) {
-        this.veiculo = veiculo;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cpf, nomeCompleto, email, senha, endereco, celular, cidade, estado);
     }
 }
-
