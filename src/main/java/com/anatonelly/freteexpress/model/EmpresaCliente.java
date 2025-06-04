@@ -1,12 +1,14 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
+@NoArgsConstructor  // construtor vazio
+@AllArgsConstructor // construtor com todos os campos
 public class EmpresaCliente {
 
     @Id
@@ -19,14 +21,24 @@ public class EmpresaCliente {
     @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
     private String endereco;
+
+    @Column(nullable = false)
     private String telefone;
 
-    public EmpresaCliente(Long id, String cnpj, String nome, String endereco, String telefone) {
-        this.id = id;
-        this.cnpj = cnpj;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.telefone = telefone;
-    }
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String senha;
+
+    @Column(nullable = false)
+    private String cidade;
+
+    @Column(nullable = false)
+    private String estado;
+
+    @Column(nullable = false, unique = true)
+    private String cpf;
 }
