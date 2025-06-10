@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "fretes")
 public class Frete {
 
     @Id
@@ -19,10 +20,15 @@ public class Frete {
     private String descricaoCarga;
     private Double valorFrete;
 
+    @Column(nullable = true)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private EmpresaCliente empresaCliente;
-    
+
+    public Frete() {
+    }
 
     public Long getId() {
         return id;
@@ -94,6 +100,14 @@ public class Frete {
 
     public void setValorFrete(Double valorFrete) {
         this.valorFrete = valorFrete;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public EmpresaCliente getEmpresaCliente() {

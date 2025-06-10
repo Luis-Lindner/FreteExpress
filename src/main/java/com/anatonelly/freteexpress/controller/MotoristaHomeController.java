@@ -20,7 +20,7 @@ public class MotoristaHomeController {
     public String showMotoristaHome(Model model) {
         try {
             List<Motorista> motoristas = motoristaRepository.findAll();
-            model.addAttribute("gestores", motoristas);
+            model.addAttribute("motoristas", motoristas);
 
             // Simulação de status de pagamento e avaliação para cada motorista
             for (Motorista motorista : motoristas) {
@@ -45,8 +45,8 @@ public class MotoristaHomeController {
                 m3.setStatusPagamento("Pendente");
                 m3.setAvaliacao(0);
 
-                motoristas.addAll(Arrays.asList(m1, m2, m3));
-                model.addAttribute("gestores", motoristas);
+                motoristas = new java.util.ArrayList<>(Arrays.asList(m1, m2, m3));
+                model.addAttribute("motoristas", motoristas);
             }
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar dados: " + e.getMessage());

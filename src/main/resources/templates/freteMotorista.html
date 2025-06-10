@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fretes - Frete Express</title>
+    <link rel="stylesheet" th:href="@{/css/freteMotorista.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>FRETES EXPRESS</h2>
+        <a href="/motorista/home">Home</a>
+        <a href="/motorista/fretes" class="active">Fretes</a>
+        <a href="/historico/fretes">Histórico de Fretes</a>
+        <a href="/empresas">Empresas</a>
+    </div>
+    <div class="content">
+        <div class="header">
+            <h2>Fretes</h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Pesquisar..." class="search-input">
+            <button class="filter-btn">Filtros</button>
+        </div>
+        <div class="frete-categories">
+            <div class="category pendentes">
+                <h3>Pendentes <span th:text="${pendentesCount}"></span></h3>
+                <div class="frete-grid" th:each="frete : ${pendentes}">
+                    <div class="frete-card">
+                        <img src="https://via.placeholder.com/150" alt="Frete Image">
+                        <h4 th:text="${frete.descricaoCarga}"></h4>
+                        <p th:text="'R$ Valor a Combinar'"></p>
+                        <p th:text="'Origem: ' + ${frete.origem} + ' / Destino: ' + ${frete.destino}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="category aceitos">
+                <h3>Aceitos <span th:text="${aceitosCount}"></span></h3>
+                <div class="frete-grid" th:each="frete : ${aceitos}">
+                    <div class="frete-card">
+                        <img src="https://via.placeholder.com/150" alt="Frete Image">
+                        <h4 th:text="${frete.descricaoCarga}"></h4>
+                        <p th:text="'R$ Valor a Combinar'"></p>
+                        <p th:text="'Origem: ' + ${frete.origem} + ' / Destino: ' + ${frete.destino}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="category finalizados">
+                <h3>Finalizados <span th:text="${finalizadosCount}"></span></h3>
+                <div class="frete-grid" th:each="frete : ${finalizados}">
+                    <div class="frete-card">
+                        <img src="https://via.placeholder.com/150" alt="Frete Image">
+                        <h4 th:text="${frete.descricaoCarga}"></h4>
+                        <p th:text="'R$ Valor a Combinar'"></p>
+                        <p th:text="'Origem: ' + ${frete.origem} + ' / Destino: ' + ${frete.destino}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${error}" class="error-message" th:text="${error}" style="color: red;"></div>
+    </div>
+</body>
+</html>
