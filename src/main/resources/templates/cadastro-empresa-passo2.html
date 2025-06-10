@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro Empresa - Passo 2</title>
+  <link rel="stylesheet" href="/css/CadastroEmpresaCSS.css">
+</head>
+<body>
+<div class="full-screen-container">
+  <div class="sidebar">
+    <img src="/img/logo.png" alt="Fretes Express Logo" class="logo">
+    <div class="logo-text">
+      <span class="fretes">FRETES</span><span class="express">EXPRESS</span>
+    </div>
+  </div>
+
+  <div class="form-content-blue">
+    <div class="steps">
+      <span>1</span>
+      <span class="active">2</span>
+    </div>
+    <h2>Cadastro Empresa</h2>
+    <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+    <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+
+    <form th:action="@{/cadastro/empresa/concluir}" th:object="${empresa}" method="post">
+      <!-- Campos ocultos para manter os dados da Empresa e Endereço -->
+      <input type="hidden" th:field="*{idEmpresa}"> <!-- Para garantir que o ID seja repassado se houver -->
+      <input type="hidden" th:field="*{email}">
+      <input type="hidden" th:field="*{senha}">
+      <input type="hidden" th:field="*{nome}">
+      <input type="hidden" th:field="*{cnpj}">
+      <input type="hidden" th:field="*{telefone}">
+      <input type="hidden" th:field="*{descricao}">
+      <input type="hidden" th:field="*{site}">
+      <!-- Campos do Endereço agora vêm da Empresa -->
+      <input type="hidden" th:field="*{endereco.idEndereco}">
+      <input type="hidden" th:field="*{endereco.rua}">
+      <input type="hidden" th:field="*{endereco.numero}">
+      <input type="hidden" th:field="*{endereco.bairro}">
+      <input type="hidden" th:field="*{endereco.cep}">
+      <input type="hidden" th:field="*{endereco.complemento}">
+      <!-- Campos de Cidade e Estado dentro de Endereço -->
+      <input type="hidden" th:field="*{endereco.cidade.idCidade}">
+      <input type="hidden" th:field="*{endereco.cidade.nome}">
+      <input type="hidden" th:field="*{endereco.cidade.estado.idEstado}">
+      <input type="hidden" th:field="*{endereco.cidade.estado.nome}">
+      <input type="hidden" th:field="*{endereco.cidade.estado.sigla}">
+      <input type="hidden" th:field="*{endereco.cidade.estado.pais.idPais}">
+      <input type="hidden" th:field="*{endereco.cidade.estado.pais.nome}">
+
+
+      <div class="form-group">
+        <label for="razaoSocial">Empresa (Razão Social)</label>
+        <input type="text" id="razaoSocial" th:field="*{razaoSocial}" required>
+      </div>
+      <div class="form-actions-bottom">
+        <button type="submit" formaction="/cadastro/empresa/voltar-passo1" formmethod="post" class="btn-voltar">Voltar</button>
+        <button type="submit" class="btn-concluir">Concluir Cadastro</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

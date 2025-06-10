@@ -2,67 +2,104 @@ package com.anatonelly.freteexpress.model;
 
 import com.anatonelly.freteexpress.enums.TipoCarroceria;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-
-import java.util.Objects;
+import jakarta.validation.constraints.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "Motorista")
+@Data
+@NoArgsConstructor
 public class Motorista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_motorista")
+    private Long idMotorista;
 
-    @Column(nullable = false, unique = true)
-    @NotBlank(message = "CPF é obrigatório")
-    private String cpf;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
 
-    @Column(nullable = false)
+    @Column(name = "nome_completo", length = 150)
     @NotBlank(message = "Nome completo é obrigatório")
+    @Size(max = 150, message = "Nome completo deve ter no máximo 150 caracteres")
     private String nomeCompleto;
 
-    @Column(nullable = false)
-    @NotBlank(message = "Email é obrigatório")
-    @Email(message = "Email inválido")
+    @Column(name = "cpf", length = 11)
+    @NotBlank(message = "CPF é obrigatório")
+    @Size(min = 11, max = 11, message = "CPF deve ter exatamente 11 dígitos")
+    @Pattern(regexp = "^\\d{11}$", message = "CPF deve conter apenas números")
+    private String cpf;
+
+    @Column(name = "email", length = 45)
+    @Email(message = "E-mail inválido")
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "senha", length = 255)
     @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
     private String senha;
 
-    private String endereco;
+    @Column(name = "celular", length = 11)
+    @Pattern(regexp = "^\\d{10,11}$", message = "Celular deve ter 10 ou 11 dígitos")
     private String celular;
+
+    @Column(name = "cnh", length = 11)
+    @NotBlank(message = "CNH é obrigatória")
+    @Size(min = 11, max = 11, message = "CNH deve ter exatamente 11 dígitos")
+    private String cnh;
+
+    @Lob
+    @Column(name = "imagem_perfil")
+    private byte[] imagemPerfil;
+
+    @Column(name = "cidade", length = 100)
     private String cidade;
+
+    @Column(name = "estado", length = 2)
+    @Size(max = 2, message = "Estado deve ter no máximo 2 caracteres")
     private String estado;
 
+    @Column(name = "foto_nome", length = 100)
     private String fotoNome;
+
+    @Column(name = "placa", length = 8)
+    @Pattern(regexp = "^[A-Z]{3}\\d[A-Z]\\d{2}$", message = "Placa deve seguir o formato AAA0A00")
     private String placa;
+
+    @Column(name = "modelo", length = 50)
     private String modelo;
+
+    @Column(name = "ano_fabricacao")
+    @Min(value = 1900, message = "Ano de fabricação deve ser maior que 1900")
     private int anoFabricacao;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_carroceria")
     private TipoCarroceria tipoCarroceria;
 
-    @Column(nullable = true)
-    private String statusPagamento; // Novo campo para status de pagamento
+    @Column(name = "status_pagamento", length = 20)
+    private String statusPagamento;
 
-    @Column(nullable = true)
-    private int avaliacao; // Novo campo para avaliação (0 a 5)
+    @Column(name = "avaliacao")
+    @Min(value = 0, message = "Avaliação deve ser no mínimo 0")
+    @Max(value = 5, message = "Avaliação deve ser no máximo 5")
+    private Integer avaliacao;
 
-    public Motorista() {
-    }
-
-    public Motorista(Long id, String cpf, String nomeCompleto, String email, String senha, String endereco, String celular, String cidade, String estado,
-                     String fotoNome, String placa, String modelo, int anoFabricacao, TipoCarroceria tipoCarroceria,
-                     String statusPagamento, int avaliacao) {
-        this.id = id;
-        this.cpf = cpf;
+    public Motorista(Long idMotorista, Endereco endereco, String nomeCompleto, String cpf, String email, String senha,
+                     String celular, String cnh, byte[] imagemPerfil, String cidade, String estado, String fotoNome,
+                     String placa, String modelo, int anoFabricacao, TipoCarroceria tipoCarroceria,
+                     String statusPagamento, Integer avaliacao) {
+        this.idMotorista = idMotorista;
+        this.endereco = endereco;
         this.nomeCompleto = nomeCompleto;
+        this.cpf = cpf;
         this.email = email;
         this.senha = senha;
-        this.endereco = endereco;
         this.celular = celular;
+        this.cnh = cnh;
+        this.imagemPerfil = imagemPerfil;
         this.cidade = cidade;
         this.estado = estado;
         this.fotoNome = fotoNome;
@@ -72,91 +109,5 @@ public class Motorista {
         this.tipoCarroceria = tipoCarroceria;
         this.statusPagamento = statusPagamento;
         this.avaliacao = avaliacao;
-    }
-
-    // Getters e Setters existentes...
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getCpf() { return cpf; }
-    public void setCpf(String cpf) { this.cpf = cpf; }
-    public String getNomeCompleto() { return nomeCompleto; }
-    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
-    public String getEndereco() { return endereco; }
-    public void setEndereco(String endereco) { this.endereco = endereco; }
-    public String getCelular() { return celular; }
-    public void setCelular(String celular) { this.celular = celular; }
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-    public String getFotoNome() { return fotoNome; }
-    public void setFotoNome(String fotoNome) { this.fotoNome = fotoNome; }
-    public String getPlaca() { return placa; }
-    public void setPlaca(String placa) { this.placa = placa; }
-    public String getModelo() { return modelo; }
-    public void setModelo(String modelo) { this.modelo = modelo; }
-    public int getAnoFabricacao() { return anoFabricacao; }
-    public void setAnoFabricacao(int anoFabricacao) { this.anoFabricacao = anoFabricacao; }
-    public TipoCarroceria getTipoCarroceria() { return tipoCarroceria; }
-    public void setTipoCarroceria(TipoCarroceria tipoCarroceria) { this.tipoCarroceria = tipoCarroceria; }
-
-    // Novos Getters e Setters
-    public String getStatusPagamento() { return statusPagamento; }
-    public void setStatusPagamento(String statusPagamento) { this.statusPagamento = statusPagamento; }
-    public int getAvaliacao() { return avaliacao; }
-    public void setAvaliacao(int avaliacao) { this.avaliacao = avaliacao; }
-
-    @Override
-    public String toString() {
-        return "Motorista{" +
-                "id=" + id +
-                ", cpf='" + cpf + '\'' +
-                ", nomeCompleto='" + nomeCompleto + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", celular='" + celular + '\'' +
-                ", cidade='" + cidade + '\'' +
-                ", estado='" + estado + '\'' +
-                ", fotoNome='" + fotoNome + '\'' +
-                ", placa='" + placa + '\'' +
-                ", modelo='" + modelo + '\'' +
-                ", anoFabricacao=" + anoFabricacao +
-                ", tipoCarroceria=" + tipoCarroceria +
-                ", statusPagamento='" + statusPagamento + '\'' +
-                ", avaliacao=" + avaliacao +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Motorista)) return false;
-        Motorista that = (Motorista) o;
-        return anoFabricacao == that.anoFabricacao &&
-                avaliacao == that.avaliacao &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(cpf, that.cpf) &&
-                Objects.equals(nomeCompleto, that.nomeCompleto) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(senha, that.senha) &&
-                Objects.equals(endereco, that.endereco) &&
-                Objects.equals(celular, that.celular) &&
-                Objects.equals(cidade, that.cidade) &&
-                Objects.equals(estado, that.estado) &&
-                Objects.equals(fotoNome, that.fotoNome) &&
-                Objects.equals(placa, that.placa) &&
-                Objects.equals(modelo, that.modelo) &&
-                tipoCarroceria == that.tipoCarroceria &&
-                Objects.equals(statusPagamento, that.statusPagamento);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cpf, nomeCompleto, email, senha, endereco, celular, cidade, estado, fotoNome, placa, modelo, anoFabricacao, tipoCarroceria, statusPagamento, avaliacao);
     }
 }
