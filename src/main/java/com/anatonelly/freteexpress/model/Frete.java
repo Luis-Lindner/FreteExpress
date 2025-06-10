@@ -21,7 +21,7 @@ public class Frete {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresaCliente empresaCliente;
+    private com.anatonelly.freteexpress.model.Empresa empresa;
     
 
     public Long getId() {
@@ -96,11 +96,11 @@ public class Frete {
         this.valorFrete = valorFrete;
     }
 
-    public EmpresaCliente getEmpresaCliente() {
-        return empresaCliente;
+    public com.anatonelly.freteexpress.model.Empresa getEmpresaCliente() {
+        return empresa;
     }
 
-    public void setEmpresaCliente(EmpresaCliente empresaCliente) {
-        this.empresaCliente = empresaCliente;
+    public void setEmpresaCliente(com.anatonelly.freteexpress.model.Empresa empresaCliente) {
+        this.empresa = empresaCliente;
     }
 }

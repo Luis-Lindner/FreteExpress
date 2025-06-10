@@ -1,34 +1,24 @@
-package com.anatonelly.freteexpress.service;
+package com.anatonelly.freteexpress.service; // PACOTE CORRIGIDO
 
-import com.anatonelly.freteexpress.model.EmpresaCliente;
-import com.anatonelly.freteexpress.repository.EmpresaClienteRepository;
+import com.anatonelly.freteexpress.model.Empresa; // IMPORT CORRIGIDO
+import com.anatonelly.freteexpress.repository.EmpresaClienteRepository; // IMPORT CORRIGIDO
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmpresaClienteService {
 
-    private final EmpresaClienteRepository repository;
+    @Autowired
+    private EmpresaClienteRepository empresaClienteRepository;
 
-    public EmpresaClienteService(EmpresaClienteRepository repository) {
-        this.repository = repository;
-    }
+    public Empresa cadastrarEmpresa(Empresa empresa) throws Exception {
+        if (empresaClienteRepository.findByEmail(empresa.getEmail()) != null) {
+            throw new Exception("Já existe uma empresa cadastrada com este email.");
+        }
+        if (empresaClienteRepository.findByCnpj(empresa.getCnpj()) != null) {
+            throw new Exception("Já existe uma empresa cadastrada com este CNPJ.");
+        }
 
-    public List<EmpresaCliente> listarTodas() {
-        return repository.findAll();
-    }
-
-    public Optional<EmpresaCliente> buscarPorId(Long id) {
-        return repository.findById(id);
-    }
-
-    public EmpresaCliente salvar(EmpresaCliente empresaCliente) {
-        return repository.save(empresaCliente);
-    }
-
-    public void deletar(Long id) {
-        repository.deleteById(id);
+        return empresaClienteRepository.save(empresa);
     }
 }

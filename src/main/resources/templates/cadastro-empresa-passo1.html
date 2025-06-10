@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Empresa - Passo 1</title>
+    <link rel="stylesheet" href="/css/CadastroEmpresaCSS.css">
+</head>
+<body>
+<div class="full-screen-container">
+    <div class="sidebar">
+        <img src="/img/logo.png" alt="Fretes Express Logo" class="logo">
+        <div class="logo-text">
+            <span class="fretes">FRETES</span><span class="express">EXPRESS</span>
+        </div>
+    </div>
+
+    <div class="form-content-blue">
+        <div class="steps">
+            <span class="active">1</span>
+            <span>2</span>
+        </div>
+        <h2>Cadastro Empresa</h2>
+        <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+
+        <!-- Adicionado th:object para Endereco também no formulário, para mapear campos -->
+        <form th:action="@{/cadastro/empresa/passo1}" th:object="${empresa}" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" th:field="*{senha}" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" th:field="*{nome}" required>
+                </div>
+                <div class="form-group half">
+                    <label for="cnpj">CNPJ</label>
+                    <input type="text" id="cnpj" th:field="*{cnpj}" placeholder="XX.XXX.XXX/XXXX-XX" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="rua">Endereço (Rua)</label>
+                <input type="text" id="rua" th:field="*{endereco.rua}" required> <!-- Mapeia para endereco.rua -->
+            </div>
+            <div class="form-group">
+                <label for="numero">Número</label>
+                <input type="text" id="numero" th:field="*{endereco.numero}" required> <!-- Mapeia para endereco.numero -->
+            </div>
+            <div class="form-group">
+                <label for="bairro">Bairro</label>
+                <input type="text" id="bairro" th:field="*{endereco.bairro}" required> <!-- Mapeia para endereco.bairro -->
+            </div>
+            <div class="form-group">
+                <label for="cep">CEP</label>
+                <input type="text" id="cep" th:field="*{endereco.cep}" required> <!-- Mapeia para endereco.cep -->
+            </div>
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" th:field="*{endereco.cidade.nome}" required> <!-- Mapeia para endereco.cidade.nome -->
+                </div>
+                <div class="form-group half">
+                    <label for="estado">Estado</label>
+                    <input type="text" id="estado" th:field="*{endereco.cidade.estado.nome}" required> <!-- Mapeia para endereco.cidade.estado.nome -->
+                </div>
+            </div>
+            <div class="form-actions-bottom">
+                <a th:href="@{/login}" class="btn-voltar-login">Voltar para o login</a>
+                <button type="submit" class="btn-continuar">Continuar</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
