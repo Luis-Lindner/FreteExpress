@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "fretes")
 public class Frete {
 
     @Id
@@ -19,10 +20,15 @@ public class Frete {
     private String descricaoCarga;
     private Double valorFrete;
 
+    @Column(nullable = true)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private com.anatonelly.freteexpress.model.Empresa empresa;
-    
+    private EmpresaCliente empresaCliente;
+
+    public Frete() {
+    }
 
     public Long getId() {
         return id;
@@ -96,11 +102,19 @@ public class Frete {
         this.valorFrete = valorFrete;
     }
 
-    public com.anatonelly.freteexpress.model.Empresa getEmpresaCliente() {
-        return empresa;
+    public String getStatus() {
+        return status;
     }
 
-    public void setEmpresaCliente(com.anatonelly.freteexpress.model.Empresa empresaCliente) {
-        this.empresa = empresaCliente;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public EmpresaCliente getEmpresaCliente() {
+        return empresaCliente;
+    }
+
+    public void setEmpresaCliente(EmpresaCliente empresaCliente) {
+        this.empresaCliente = empresaCliente;
     }
 }

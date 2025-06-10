@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f2f2f2;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #eaeaea;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #1a1a1a;
+    font-weight: bold;
+}
+
+.logo-container img {
+    height: 40px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    background-color: white;
+    border: 2px solid #f9cc00;
+    border-radius: 8px;
+    color: #f9cc00;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #f9cc00;
+    color: white;
+}
+
+.content {
+    margin-left: 270px;
+    padding: 30px;
+    background-color: #0c0c75;
+    min-height: 100vh;
+    color: white;
+}
+
+.header h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    color: #333;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th, td {
+    padding: 16px;
+    text-align: left;
+}
+
+th {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.status-pago {
+    color: green;
+    font-weight: bold;
+}
+
+.status-pendente {
+    color: #f9cc00;
+    font-weight: bold;
+}
+
+.status-atrasado {
+    color: red;
+    font-weight: bold;
+}
+
+.avaliacao {
+    font-size: 18px;
+    color: #f9cc00;
+}
+
+button.aguardando {
+    background-color: #f9cc00;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: default;
+    font-weight: bold;
+}
+
+.error-message {
+    margin-top: 20px;
+    color: red;
+    background-color: #ffe5e5;
+    padding: 10px;
+    border-radius: 5px;
+}
