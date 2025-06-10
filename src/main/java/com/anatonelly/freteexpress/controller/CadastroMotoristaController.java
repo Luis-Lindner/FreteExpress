@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class CadastroController {
+public class CadastroMotoristaController {
 
     @GetMapping("/cadastro")
     public ModelAndView showCadastro() {
@@ -45,7 +45,7 @@ public class CadastroController {
         System.out.println("Ano: " + ano);
         System.out.println("Tipo de Veículo: " + tipo);
 
-        // Redireciona para a página de login ou uma página de sucesso
+        // Redireciona para a página de login
         return new ModelAndView("redirect:/login");
     }
 
