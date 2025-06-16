@@ -28,7 +28,7 @@ public class AvaliacaoEmpresa {
     // Relacionamento com a entidade Empresa
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_empresa", nullable = false) // Nome da coluna FK no DB
-    private Empresa empresa;
+    private EmpresaCliente empresa;
 
     // Relacionamento com a entidade Motorista
     @ManyToOne(fetch = FetchType.LAZY)

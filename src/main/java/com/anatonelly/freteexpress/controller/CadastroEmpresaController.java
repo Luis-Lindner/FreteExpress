@@ -1,6 +1,6 @@
 package com.anatonelly.freteexpress.controller;
 
-import com.anatonelly.freteexpress.model.Empresa;
+import com.anatonelly.freteexpress.model.EmpresaCliente;
 import com.anatonelly.freteexpress.model.Endereco;
 import com.anatonelly.freteexpress.model.Cidade;
 import com.anatonelly.freteexpress.model.Estado;
@@ -43,10 +43,10 @@ public class CadastroEmpresaController {
     @GetMapping("/passo1")
     public String showCadastroEmpresaPasso1(Model model) {
         if (!model.containsAttribute("empresa")) {
-            model.addAttribute("empresa", new Empresa());
+            model.addAttribute("empresa", new EmpresaCliente());
             model.addAttribute("endereco", new Endereco());
         } else {
-            Empresa empresa = (Empresa) model.getAttribute("empresa");
+            EmpresaCliente empresa = (EmpresaCliente) model.getAttribute("empresa");
             // Certifique-se que está chamando getEndereco() e não getEndereço()
             if (empresa.getEndereco() == null) {
                 model.addAttribute("endereco", new Endereco());
@@ -59,7 +59,7 @@ public class CadastroEmpresaController {
 
     @PostMapping("/passo1")
     public String submitCadastroEmpresaPasso1(
-            @ModelAttribute("empresa") Empresa empresa,
+            @ModelAttribute("empresa") EmpresaCliente empresa,
             @ModelAttribute("endereco") Endereco endereco,
             RedirectAttributes redirectAttributes) {
 
@@ -113,7 +113,7 @@ public class CadastroEmpresaController {
     }
 
     @GetMapping("/passo2")
-    public String showCadastroEmpresaPasso2(@ModelAttribute("empresa") Empresa empresa, Model model) {
+    public String showCadastroEmpresaPasso2(@ModelAttribute("empresa") EmpresaCliente empresa, Model model) {
         if (empresa.getEmail() == null) {
             return "redirect:/cadastro/empresa/passo1";
         }
@@ -122,7 +122,7 @@ public class CadastroEmpresaController {
     }
 
     @PostMapping("/concluir")
-    public String concluirCadastroEmpresa(@ModelAttribute("empresa") Empresa empresa,
+    public String concluirCadastroEmpresa(@ModelAttribute("empresa") EmpresaCliente empresa,
                                           RedirectAttributes redirectAttributes) {
         if (empresa.getRazaoSocial() == null || empresa.getRazaoSocial().isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Por favor, preencha o campo Empresa (Razão Social).");
@@ -152,7 +152,7 @@ public class CadastroEmpresaController {
     }
 
     @PostMapping("/voltar-passo1")
-    public String voltarParaPasso1(@ModelAttribute("empresa") Empresa empresa,
+    public String voltarParaPasso1(@ModelAttribute("empresa") EmpresaCliente empresa,
                                    RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("empresa", empresa);
         return "redirect:/cadastro/empresa/passo1";

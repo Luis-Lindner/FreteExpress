@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Empresa")
 @Data // <<< Esta anotação gera os getters e setters
 @NoArgsConstructor
-public class Empresa {
+public class EmpresaCliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

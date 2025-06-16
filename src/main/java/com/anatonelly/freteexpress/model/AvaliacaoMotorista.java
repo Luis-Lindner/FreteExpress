@@ -20,5 +20,5 @@ public class AvaliacaoMotorista {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private com.anatonelly.freteexpress.model.Empresa empresa;
+    private EmpresaCliente empresa;
 }
