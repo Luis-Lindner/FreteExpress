@@ -10,7 +10,7 @@ import com.anatonelly.freteexpress.service.EmpresaClienteService;
 import com.anatonelly.freteexpress.service.EnderecoService;
 import com.anatonelly.freteexpress.service.CidadeService;
 import com.anatonelly.freteexpress.service.EstadoService;
-import com.anatonelly.freteexpress.service.PaisService;
+import com.anatonelly.freteexpress.service.PaisService; // Import correto
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.hibernate.Hibernate; // Import para inicializar proxies
 
 @Controller
 @RequestMapping("/cadastro/empresa")
@@ -42,55 +43,126 @@ public class CadastroEmpresaController {
 
     @GetMapping("/passo1")
     public String showCadastroEmpresaPasso1(Model model) {
-        if (!model.containsAttribute("empresa")) {
-            model.addAttribute("empresa", new Empresa());
-            model.addAttribute("endereco", new Endereco());
-        } else {
-            Empresa empresa = (Empresa) model.getAttribute("empresa");
-            // Certifique-se que está chamando getEndereco() e não getEndereço()
+        Empresa empresa;
+        Endereco endereco;
+
+        if (model.containsAttribute("empresa")) {
+            empresa = (Empresa) model.getAttribute("empresa");
             if (empresa.getEndereco() == null) {
-                model.addAttribute("endereco", new Endereco());
+                endereco = new Endereco();
+                empresa.setEndereco(endereco);
             } else {
-                model.addAttribute("endereco", empresa.getEndereco());
+                endereco = empresa.getEndereco();
+                // Inicialize as entidades carregadas lazy aqui também, se vierem do flash e forem usadas imediatamente
+                if (endereco.getCidade() != null) {
+                    Hibernate.initialize(endereco.getCidade());
+                    if (endereco.getCidade().getEstado() != null) {
+                        Hibernate.initialize(endereco.getCidade().getEstado());
+                        if (endereco.getCidade().getEstado().getPais() != null) {
+                            Hibernate.initialize(endereco.getCidade().getEstado().getPais());
+                        }
+                    }
+                }
             }
+        } else {
+            empresa = new Empresa();
+            endereco = new Endereco();
+            empresa.setEndereco(endereco);
         }
+
+        // Garante que objetos aninhados não sejam nulos para o binding do formulário
+        if (endereco.getCidade() == null) {
+            endereco.setCidade(new Cidade());
+        }
+        if (endereco.getCidade().getEstado() == null) {
+            endereco.getCidade().setEstado(new Estado());
+        }
+        if (endereco.getCidade().getEstado().getPais() == null) {
+            endereco.getCidade().getEstado().setPais(new Pais());
+        }
+
+        model.addAttribute("empresa", empresa);
         return "cadastro-empresa-passo1";
     }
 
     @PostMapping("/passo1")
     public String submitCadastroEmpresaPasso1(
             @ModelAttribute("empresa") Empresa empresa,
-            @ModelAttribute("endereco") Endereco endereco,
             RedirectAttributes redirectAttributes) {
 
-        // Validação (ajustada para campos de Endereco)
-        if (empresa.getEmail() == null || empresa.getEmail().isEmpty() || // << getEmail()
-                empresa.getSenha() == null || empresa.getSenha().isEmpty() || // << getSenha()
-                empresa.getNome() == null || empresa.getNome().isEmpty() || // << getNome()
+        // --- INÍCIO: LINHAS DE DEBUG ---
+        System.out.println("--- DEBUGGING FORM BINDING ---");
+        System.out.println("Empresa:");
+        System.out.println("  Email: " + empresa.getEmail());
+        System.out.println("  Senha: " + empresa.getSenha());
+        System.out.println("  Nome: " + empresa.getNome());
+        System.out.println("  CNPJ: " + empresa.getCnpj());
+
+        Endereco endereco = empresa.getEndereco();
+        System.out.println("Endereco:");
+        if (endereco != null) {
+            System.out.println("  Rua: " + endereco.getRua());
+            System.out.println("  Número: " + endereco.getNumero());
+            System.out.println("  Bairro: " + endereco.getBairro());
+            System.out.println("  CEP: " + endereco.getCep());
+
+            if (endereco.getCidade() != null) {
+                System.out.println("  Cidade (objeto): NÃO NULO");
+                System.out.println("  Cidade Nome: " + endereco.getCidade().getNome());
+                if (endereco.getCidade().getEstado() != null) {
+                    System.out.println("  Cidade Estado (objeto): NÃO NULO");
+                    System.out.println("  Cidade Estado Nome: " + endereco.getCidade().getEstado().getNome());
+                    if (endereco.getCidade().getEstado().getPais() != null) {
+                        System.out.println("  Cidade Estado País (objeto): NÃO NULO");
+                        System.out.println("  Cidade Estado País Nome: " + endereco.getCidade().getEstado().getPais().getNome());
+                    } else {
+                        System.out.println("  Cidade Estado País (objeto): NULO");
+                    }
+                } else {
+                    System.out.println("  Cidade Estado (objeto): NULO");
+                }
+            } else {
+                System.out.println("  Cidade (objeto): NULO");
+            }
+        } else {
+            System.out.println("  Endereco (objeto): NULO");
+        }
+        System.out.println("--- FIM DEBUGGING FORM BINDING ---");
+        // --- FIM: LINHAS DE DEBUG ---
+
+        // --- INÍCIO: Validação dos campos ---
+        if (empresa.getEmail() == null || empresa.getEmail().isEmpty() ||
+                empresa.getSenha() == null || empresa.getSenha().isEmpty() ||
+                empresa.getNome() == null || empresa.getNome().isEmpty() ||
                 empresa.getCnpj() == null || empresa.getCnpj().isEmpty() ||
-                endereco.getRua() == null || endereco.getRua().isEmpty() ||
-                endereco.getCidade() == null ||
-                endereco.getCidade().getNome() == null || endereco.getCidade().getNome().isEmpty() || // Validação do nome da cidade
-                endereco.getCidade().getEstado() == null ||
-                endereco.getCidade().getEstado().getNome() == null || endereco.getCidade().getEstado().getNome().isEmpty()) { // Validação do nome do estado
+                empresa.getEndereco() == null ||
+                empresa.getEndereco().getRua() == null || empresa.getEndereco().getRua().isEmpty() ||
+                empresa.getEndereco().getNumero() == null ||
+                empresa.getEndereco().getBairro() == null || empresa.getEndereco().getBairro().isEmpty() ||
+                empresa.getEndereco().getCep() == null || empresa.getEndereco().getCep().isEmpty() ||
+                empresa.getEndereco().getCidade() == null ||
+                empresa.getEndereco().getCidade().getNome() == null || empresa.getEndereco().getCidade().getNome().isEmpty() ||
+                empresa.getEndereco().getCidade().getEstado() == null ||
+                empresa.getEndereco().getCidade().getEstado().getNome() == null || empresa.getEndereco().getCidade().getEstado().getNome().isEmpty()) {
+
             redirectAttributes.addFlashAttribute("errorMessage", "Por favor, preencha todos os campos do passo 1.");
             redirectAttributes.addFlashAttribute("empresa", empresa);
-            redirectAttributes.addFlashAttribute("endereco", endereco);
             return "redirect:/cadastro/empresa/passo1";
         }
+        // --- FIM: Validação dos campos ---
 
-        // Antes de redirecionar para o passo 2, precisamos mockar ou buscar as entidades de Cidade e Estado
-        // Para o exemplo, vamos assumir que você tem um mock ou busca por nome
-        // Em um cenário real, você buscaria Cidade/Estado pelo nome ou ID do formulário
-        Cidade cidade = cidadeService.findByNome(endereco.getCidade().getNome());
+
+        Cidade cidade = cidadeService.findByNome(empresa.getEndereco().getCidade().getNome());
         if (cidade == null) {
             cidade = new Cidade();
-            cidade.setNome(endereco.getCidade().getNome());
-            Estado estado = estadoService.findByNome(endereco.getCidade().getEstado().getNome());
+            cidade.setNome(empresa.getEndereco().getCidade().getNome());
+
+            Estado estado = estadoService.findByNome(empresa.getEndereco().getCidade().getEstado().getNome());
             if (estado == null) {
                 estado = new Estado();
-                estado.setNome(endereco.getCidade().getEstado().getNome());
-                estado.setSigla("XX"); // Exemplo de sigla, você pode precisar coletar isso do form ou ter um padrão
+                estado.setNome(empresa.getEndereco().getCidade().getEstado().getNome());
+                estado.setSigla("XX");
+
                 Pais pais = paisService.findByNome("Brasil");
                 if (pais == null) {
                     pais = new Pais();
@@ -103,11 +175,23 @@ public class CadastroEmpresaController {
             cidade.setEstado(estado);
             cidade = cidadeService.save(cidade);
         }
-        endereco.setCidade(cidade);
+        empresa.getEndereco().setCidade(cidade);
 
-        // Armazena os dados do passo 1 na sessão temporariamente ou redireciona com atributos
-        empresa.setEndereco(endereco);
 
+        // Armazena os dados do passo 1 nos flash attributes para o próximo passo
+        // Força a inicialização das entidades lazy antes de passá-las para o flash attribute
+        if (empresa.getEndereco() != null) {
+            Hibernate.initialize(empresa.getEndereco());
+            if (empresa.getEndereco().getCidade() != null) {
+                Hibernate.initialize(empresa.getEndereco().getCidade());
+                if (empresa.getEndereco().getCidade().getEstado() != null) {
+                    Hibernate.initialize(empresa.getEndereco().getCidade().getEstado());
+                    if (empresa.getEndereco().getCidade().getEstado().getPais() != null) {
+                        Hibernate.initialize(empresa.getEndereco().getCidade().getEstado().getPais());
+                    }
+                }
+            }
+        }
         redirectAttributes.addFlashAttribute("empresa", empresa);
         return "redirect:/cadastro/empresa/passo2";
     }
@@ -131,8 +215,6 @@ public class CadastroEmpresaController {
         }
 
         try {
-            // Salvar o endereço primeiro, se ele não tiver um ID (ou seja, se for novo)
-            // Se o endereço já tiver um ID (vindo de um retorno), ele será atualizado
             Endereco savedEndereco = enderecoService.save(empresa.getEndereco());
             empresa.setEndereco(savedEndereco);
 

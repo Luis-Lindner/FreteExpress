@@ -25,7 +25,7 @@ public class Frete {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresaCliente empresaCliente;
+    private Empresa empresaCliente;
 
     public Frete() {
     }
@@ -110,11 +110,11 @@ public class Frete {
         this.status = status;
     }
 
-    public EmpresaCliente getEmpresaCliente() {
+    public Empresa getEmpresaCliente() {
         return empresaCliente;
     }
 
-    public void setEmpresaCliente(EmpresaCliente empresaCliente) {
+    public void setEmpresaCliente(Empresa empresa) {
         this.empresaCliente = empresaCliente;
     }
 }
