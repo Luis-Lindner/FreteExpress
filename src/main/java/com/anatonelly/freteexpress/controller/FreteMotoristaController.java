@@ -37,12 +37,13 @@ public class FreteMotoristaController {
     }
 
     @PostMapping("/motorista/solicitar-frete")
-    public String solicitarFrete(@RequestParam Long freteId, Model model) {
+    public String solicitarFrete(@RequestParam Integer freteId, Model model) { // <<<<< CORRIGIDO AQUI: Long para Integer
         try {
             // Simulação: Motorista logado com ID 1 (ajuste conforme autenticação)
-            Optional<Motorista> motoristaOpt = motoristaRepository.findById(1L);
+            // Use 1, sem 'L' para que seja Integer
+            Optional<Motorista> motoristaOpt = motoristaRepository.findById(1); // <<<<< CORRIGIDO AQUI: 1L para 1
             if (motoristaOpt.isPresent()) {
-                if (freteService.solicitarFrete(freteId, 1L)) {
+                if (freteService.solicitarFrete(freteId, 1)) { // <<<<< CORRIGIDO AQUI: 1L para 1
                     model.addAttribute("message", "Frete solicitado com sucesso!");
                 } else {
                     model.addAttribute("error", "Frete não disponível para solicitação.");

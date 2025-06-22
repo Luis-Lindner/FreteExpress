@@ -21,7 +21,7 @@ public class FreteRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Frete> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Frete> buscarPorId(@PathVariable Integer id) { // <<<<< CORRIGIDO AQUI: Long para Integer
         return freteService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,19 +33,17 @@ public class FreteRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Frete> atualizar(@PathVariable Long id, @RequestBody Frete frete) {
+    public ResponseEntity<Frete> atualizar(@PathVariable Integer id, @RequestBody Frete frete) { // <<<<< CORRIGIDO AQUI: Long para Integer
         return freteService.atualizar(id, frete)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) { // <<<<< CORRIGIDO AQUI: Long para Integer
         if (freteService.deletar(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 }
-
-
