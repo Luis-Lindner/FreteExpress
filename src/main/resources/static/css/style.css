@@ -1,0 +1,516 @@
+/* Paleta de Cores da Referência - Ajustada para o novo design */
+:root {
+    --primary-blue: #2e3b6a; /* Azul escuro principal (para sidebar, topbar e fundo da seção de dashboard) */
+    --accent-yellow: #f8c000; /* Amarelo/Dourado de destaque (para ativo, botões, estrelas, ícones da topbar) */
+    --text-light: #ffffff; /* Texto claro (em fundos azuis) */
+    --text-dark: #333333; /* Texto escuro (em fundos claros/brancos) */
+    --bg-light-grey: #f4f7f6; /* Fundo geral claro do body/container */
+
+    /* Cores da tabela */
+    --table-header-bg: var(--primary-blue); /* Cabeçalho da tabela usa o azul principal */
+    --table-header-text: var(--text-light);
+    --table-row-bg: #ffffff; /* Fundo branco para as linhas da tabela */
+
+    /* Cores das tags de status */
+    --status-paid-bg: #d4edda; /* Verde claro */
+    --status-paid-text: #155724; /* Verde escuro */
+    --status-pending-bg: #fff3cd; /* Amarelo claro */
+    --status-pending-text: #856404; /* Amarelo escuro */
+}
+
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-light-grey); /* Fundo geral claro */
+    color: var(--text-dark); /* Cor do texto padrão (para elementos que não têm cor específica) */
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    /* Removido o background-color aqui, pois o body já define o fundo geral */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--primary-blue); /* Azul escuro */
+    color: var(--text-light);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    /* Sombra mais pronunciada e escura para separar do fundo claro */
+    box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+    /* Removida a borda, a sombra já faz o trabalho */
+    /* border-right: 1px solid var(--border-color); */
+}
+
+/* Removido o estilo .sidebar .logo-sidebar pois o logo foi movido */
+
+
+.sidebar .nav-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar .nav-menu li {
+    margin-bottom: 8px; /* Espaçamento entre os itens do menu */
+}
+
+.sidebar .nav-menu a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px; /* Mais padding para itens maiores */
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 8px; /* Bordas mais arredondadas */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+}
+
+.sidebar .nav-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Um tom de hover sutil */
+}
+
+.sidebar .nav-menu a.active {
+    background-color: var(--accent-yellow); /* Fundo amarelo para ativo */
+    color: var(--text-dark); /* Texto escuro no item ativo */
+    font-weight: 700;
+}
+
+/* Ícones do menu (Font Awesome) */
+.sidebar .nav-menu a i {
+    margin-right: 15px; /* Espaço para o ícone */
+    font-size: 1.4em; /* Ícone maior */
+    color: inherit; /* Herda a cor do link */
+}
+.sidebar .nav-menu a.active i {
+    color: var(--text-dark); /* Garante que o ícone do ativo seja escuro */
+}
+
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    background-color: var(--bg-light-grey); /* O fundo principal do conteúdo é o cinza claro */
+    padding: 30px; /* Mais padding geral */
+    /* Removido border-top-left-radius, pois a nova imagem não mostra isso */
+    overflow-y: auto;
+}
+
+/* Topbar para Empresa (CABEÇALHO SUPERIOR) */
+.topbar.company-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-blue); /* Fundo azul escuro */
+    color: var(--text-light);
+    padding: 15px 30px; /* Padding generoso */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Sombra mais forte */
+    margin-bottom: 30px; /* Espaçamento abaixo da topbar */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Novo estilo para o logo na topbar */
+.topbar.company-topbar .logo-header-new {
+    display: flex;
+    align-items: center;
+}
+
+.topbar.company-topbar .logo-header-new .new-logo-img {
+    width: 45px; /* Tamanho da imagem do leão */
+    height: auto;
+    margin-right: 15px; /* Espaço entre imagem e texto */
+}
+
+.topbar.company-topbar .logo-header-new span {
+    font-size: 1.6em; /* Tamanho da fonte para "FRETES" */
+    font-weight: 400;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.topbar.company-topbar .logo-header-new strong {
+    color: var(--accent-yellow); /* "EXPRESS" em amarelo */
+    font-weight: 700;
+    font-size: 1.1em; /* Ajuste o tamanho relativo a "FRETES" */
+}
+
+
+.topbar.company-topbar .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaçamento entre os ícones */
+}
+
+/* Removido .profile-icon pois o ícone de perfil foi removido do HTML */
+
+.topbar.company-topbar .user-profile .notification-bell,
+.topbar.company-topbar .user-profile .user-circle-icon {
+    font-size: 1.9em; /* Ícones maiores */
+    cursor: pointer;
+    color: var(--accent-yellow); /* Ícones em amarelo */
+    transition: color 0.3s ease;
+}
+
+.topbar.company-topbar .user-profile .notification-bell:hover,
+.topbar.company-topbar .user-profile .user-circle-icon:hover {
+    color: var(--text-light); /* Hover para branco */
+}
+
+/* Dashboard Section para a Home da Empresa (o "cartão" principal) */
+.dashboard-section.company-home-section {
+    background-color: var(--primary-blue); /* Fundo azul escuro para a seção de dashboards */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Sombra para o cartão */
+    color: var(--text-light);
+}
+
+.dashboard-section .section-title-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Linha divisória sutil */
+}
+
+.dashboard-section .main-title {
+    font-size: 2.2em;
+    color: var(--text-light);
+    margin-right: 20px;
+    font-weight: 700;
+}
+
+.dashboard-section .main-title i,
+.dashboard-section .sub-title i {
+    margin-right: 10px;
+    color: var(--accent-yellow);
+    font-size: 1.5em;
+}
+
+.dashboard-section .sub-title {
+    font-size: 1.4em;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Tables */
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    background-color: var(--primary-blue); /* O container da tabela não tem fundo branco, o fundo é do cartão principal */
+    border-radius: 8px; /* Arredondamento para o container da tabela, se for o caso */
+    /* Removi box-shadow e padding daqui, pois as linhas da tabela é que terão seu próprio visual */
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px; /* Mais espaçamento entre as linhas (como cartões) */
+}
+
+table th,
+table td {
+    padding: 15px 25px; /* Mais padding para células maiores */
+    text-align: left;
+}
+
+table thead tr {
+    background-color: var(--table-header-bg); /* Fundo azul para o cabeçalho */
+    color: var(--table-header-text);
+    border-radius: 8px; /* Arredondamento para todo o cabeçalho, se ele for um bloco */
+    /* Se você quiser o cabeçalho com cantos arredondados e as linhas sem, considere um tbody com border-radius*/
+}
+table thead th:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+table thead th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+table th {
+    font-weight: 700;
+    font-size: 1.1em; /* Um pouco maior */
+    text-transform: uppercase;
+    position: relative;
+}
+
+table th i.fas.fa-sort {
+    font-size: 0.9em;
+    margin-left: 8px; /* Mais espaço */
+    color: rgba(255, 255, 255, 0.7);
+}
+
+table tbody tr {
+    background-color: var(--table-row-bg); /* Fundo branco para as linhas do corpo */
+    border-radius: 8px; /* Arredondamento para cada linha (cartão) */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra suave para cada linha */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: var(--text-dark); /* Cor do texto padrão das linhas */
+}
+
+table tbody tr:hover {
+    transform: translateY(-3px); /* Efeito de elevação mais notável */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+table td {
+    border-bottom: none; /* Remove a borda inferior das células */
+}
+
+/* Estilos específicos para a tabela de Motoristas */
+.status-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; /* Mais padding para tag maior */
+    border-radius: 25px; /* Completamente arredondado (pill shape) */
+    font-size: 0.9em; /* Levemente maior */
+    font-weight: bold;
+    text-align: center;
+    min-width: 100px; /* Largura mínima para tags */
+    text-transform: uppercase;
+}
+
+.status-tag.paid {
+    background-color: var(--status-paid-bg);
+    color: var(--status-paid-text);
+}
+
+.status-tag.pending {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-text);
+}
+
+.stars {
+    color: var(--accent-yellow);
+    font-size: 1.5em; /* Estrelas maiores */
+    margin-right: 20px; /* Mais espaço */
+    vertical-align: middle;
+    letter-spacing: 2px;
+}
+
+.action-button {
+    background-color: var(--accent-yellow); /* Botão em amarelo */
+    color: var(--text-dark); /* Texto escuro */
+    padding: 10px 22px; /* Mais padding */
+    border: none;
+    border-radius: 25px; /* Bordas bem arredondadas (pill shape) */
+    font-size: 0.95em; /* Levemente maior */
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.action-button:hover {
+    background-color: #e6b000; /* Tom mais escuro de amarelo no hover */
+    transform: translateY(-1px);
+}
+
+.view-all {
+    text-align: right;
+    margin-top: 30px; /* Mais espaçamento */
+}
+
+.view-all a {
+    color: var(--text-light); /* Link em cor clara (para se destacar no fundo azul do cartão) */
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1em; /* Link maior */
+    transition: color 0.3s ease;
+}
+
+.view-all a:hover {
+    color: var(--accent-yellow); /* Amarelo no hover */
+}
+
+
+/* Responsividade aprimorada (Ajustada para o novo layout) */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 220px; /* Sidebar um pouco menor */
+        padding: 15px;
+    }
+    .sidebar .nav-menu a {
+        padding: 12px 15px;
+        font-size: 0.95em;
+    }
+    .main-content {
+        padding: 20px;
+    }
+    .topbar.company-topbar {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+    }
+    .topbar.company-topbar .logo-header-new span {
+        font-size: 1.4em;
+    }
+    .topbar.company-topbar .logo-header-new strong {
+        font-size: 1em;
+    }
+    .topbar.company-topbar .logo-header-new .new-logo-img {
+        width: 40px;
+    }
+    .topbar.company-topbar .user-profile .notification-bell,
+    .topbar.company-topbar .user-profile .user-circle-icon {
+        font-size: 1.7em;
+    }
+    .dashboard-section.company-home-section {
+        padding: 25px;
+    }
+    .dashboard-section .main-title {
+        font-size: 2em;
+    }
+    .dashboard-section .sub-title {
+        font-size: 1.3em;
+    }
+    table th, table td {
+        padding: 12px 18px;
+    }
+    .status-tag {
+        padding: 8px 15px;
+        min-width: 90px;
+    }
+    .action-button {
+        padding: 8px 18px;
+    }
+    .stars {
+        font-size: 1.3em;
+        margin-right: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Empilha sidebar e main-content */
+    }
+    .sidebar {
+        width: 100%; /* Sidebar ocupa toda a largura */
+        height: auto;
+        padding: 15px;
+        flex-direction: row; /* Itens da sidebar em linha para telas menores */
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap; /* Permite que os itens quebrem linha se não houver espaço */
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1); /* Sombra na parte inferior da sidebar */
+        border-right: none;
+    }
+    .sidebar .nav-menu {
+        width: 100%;
+        margin-top: 15px;
+    }
+    .sidebar .nav-menu ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .sidebar .nav-menu li {
+        margin: 5px; /* Espaço entre os itens no modo mobile */
+        flex: 1 1 auto; /* Permite que os itens se ajustem e ocupem o espaço */
+        text-align: center;
+    }
+    .sidebar .nav-menu a {
+        justify-content: center; /* Centraliza ícone e texto para itens de menu */
+        padding: 10px; /* Padding menor */
+        font-size: 0.85em;
+    }
+    .sidebar .nav-menu a i {
+        margin-right: 5px;
+        font-size: 1.1em;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+    .topbar.company-topbar {
+        flex-direction: column; /* Empilha logo e ícones na topbar */
+        align-items: flex-start;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+    }
+    .topbar.company-topbar .logo-header-new {
+        margin-bottom: 10px; /* Espaçamento entre logo e ícones */
+    }
+    .topbar.company-topbar .user-profile {
+        width: 100%;
+        justify-content: flex-end; /* Ícones à direita */
+    }
+
+    /* Ajustes para a seção de dashboard em telas menores */
+    .dashboard-section.company-home-section {
+        padding: 15px;
+    }
+    .dashboard-section .section-title-group {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    .dashboard-section .main-title {
+        font-size: 1.8em;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .dashboard-section .sub-title {
+        font-size: 1.2em;
+    }
+    .table-container {
+        padding: 0; /* Remove padding extra do container da tabela */
+    }
+    table th, table td {
+        padding: 10px 12px;
+        font-size: 0.85em;
+    }
+    .status-tag, .action-button {
+        font-size: 0.75em;
+        padding: 6px 12px;
+    }
+    .stars {
+        font-size: 1.2em;
+        letter-spacing: 1px;
+    }
+    .view-all {
+        margin-top: 20px;
+    }
+    .view-all a {
+        font-size: 0.9em;
+    }
+}
+
+/* Media query para telas muito pequenas, para evitar que os links do menu fiquem muito apertados */
+@media (max-width: 480px) {
+    .sidebar .nav-menu li {
+        flex: 1 1 45%; /* Tenta duas colunas */
+    }
+    .sidebar .nav-menu a {
+        font-size: 0.8em;
+        padding: 8px;
+    }
+    .sidebar .nav-menu a i {
+        font-size: 1em;
+        margin-right: 3px;
+    }
+    .topbar.company-topbar .logo-header-new span {
+        font-size: 1.2em;
+    }
+    .topbar.company-topbar .logo-header-new strong {
+        font-size: 0.9em;
+    }
+}

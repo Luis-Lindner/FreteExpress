@@ -37,7 +37,7 @@
             </td>
             <td>
                 <span th:if="${motorista.avaliacao > 0}" class="avaliacao"
-                      th:text="'★'.repeat(motorista.avaliacao) + '☆'.repeat(5 - motorista.avaliacao)"></span>
+                      th:text="${estrelasAvaliacao[motorista.id]}"></span>
                 <button th:if="${motorista.avaliacao == 0}" class="aguardando">Aguardando</button>
             </td>
         </tr>
