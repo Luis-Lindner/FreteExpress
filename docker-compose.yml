@@ -6,11 +6,14 @@ services:
     ports:
       - "8080:8080"
     environment:
+      # CORREÇÃO: Usando o usuário 'user' em vez de 'root'
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/meubanco?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=senha
     depends_on:
-      - db
+      # MELHORIA: Agora espera o 'db' estar saudável (healthy) antes de iniciar
+      db:
+        condition: service_healthy
 
   db:
     image: mysql:8.0
@@ -22,6 +25,12 @@ services:
       MYSQL_PASSWORD: senha
     volumes:
       - db_data:/var/lib/mysql
+    # MELHORIA: Adicionado healthcheck para verificar se o banco está pronto
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p1234"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db_data:

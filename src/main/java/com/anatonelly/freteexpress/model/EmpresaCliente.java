@@ -1,38 +1,44 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
-import lombok.Data; // <<< Certifique-se que Lombok está importado e @Data está presente
-import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Empresa")
-@Data // <<< Esta anotação gera os getters e setters
-@NoArgsConstructor
+@Table(name = "empresas_cliente")
 public class EmpresaCliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEmpresa;
+    private Long id;
 
-    // ATENÇÃO AQUI: O nome do atributo deve ser 'endereco' (sem 'ç')
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_endereco") // Nome da coluna FK no DB
-    private Endereco endereco; // <<< O nome do atributo deve ser 'endereco'
-
-    @Column(name = "nome", length = 100)
     private String nome;
-
-    @Column(name = "razaoSocial", length = 100)
-    private String razaoSocial;
-
-    @Column(name = "cnpj", length = 14)
+    private String email;
+    private String senha;
     private String cnpj;
 
-    @Column(name = "email", length = 45) // <<< 'email' para getEmail()
-    private String email;
+    @OneToOne(cascade = CascadeType.ALL) // Salva o endereço junto com a empresa
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    private Endereco endereco;
 
-    @Column(name = "senha", length = 255) // <<< 'senha' para getSenha()
-    private String senha;
+    public EmpresaCliente() {
+    }
+    
+    // Getters e Setters
 
-    // ... (outros atributos)
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
+
+    public String getCnpj() { return cnpj; }
+    public void setCnpj(String cnpj) { this.cnpj = cnpj; }
+
+    public Endereco getEndereco() { return endereco; }
+    public void setEndereco(Endereco endereco) { this.endereco = endereco; }
 }

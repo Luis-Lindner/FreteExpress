@@ -1,27 +1,58 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Estado")
-@Data
-@NoArgsConstructor
 public class Estado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_estado") // Mapeia para id_estado no DB
+    @Column(name = "id_estado")
     private Integer idEstado;
 
-    @Column(name = "nome", length = 45)
+    @Column(name = "nome", length = 45, nullable = false)
     private String nome;
 
-    @Column(name = "sigla", length = 45)
-    private String sigla;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pais") // Nome da coluna FK no DB
+    @JoinColumn(name = "id_pais", nullable = false)
     private Pais pais;
+
+
+    // --- Construtores ---
+
+    public Estado() {
+    }
+
+    public Estado(String nome, Pais pais) {
+        this.nome = nome;
+        this.pais = pais;
+    }
+
+
+    // --- Getters e Setters ---
+
+    public Integer getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(Integer idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Pais getPais() {
+        return pais;
+    }
+
+    public void setPais(Pais pais) {
+        this.pais = pais;
+    }
 }

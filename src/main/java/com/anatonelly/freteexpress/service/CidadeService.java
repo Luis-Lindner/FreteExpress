@@ -1,21 +1,26 @@
 package com.anatonelly.freteexpress.service;
 
 import com.anatonelly.freteexpress.model.Cidade;
+import com.anatonelly.freteexpress.model.Estado;
 import com.anatonelly.freteexpress.repository.CidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CidadeService {
 
-    @Autowired
-    private CidadeRepository cidadeRepository;
+    private final CidadeRepository cidadeRepository;
 
-    public Cidade save(Cidade cidade) {
-        return cidadeRepository.save(cidade);
+    @Autowired
+    public CidadeService(CidadeRepository cidadeRepository) {
+        this.cidadeRepository = cidadeRepository;
     }
 
-    public Cidade findByNome(String nome) {
-        return cidadeRepository.findByNome(nome);
+    // Este método é mais útil: ele busca uma cidade pelo nome. Se não existir, ele a cria.
+    @Transactional // Garante a consistência da operação
+    public Cidade findOrCreate(String nome, Estado estado) {
+        return cidadeRepository.findByNome(nome)
+                .orElseGet(() -> cidadeRepository.save(new Cidade(nome, estado)));
     }
 }
