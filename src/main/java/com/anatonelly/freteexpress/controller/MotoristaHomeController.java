@@ -2,89 +2,75 @@ package com.anatonelly.freteexpress.controller;
 
 import com.anatonelly.freteexpress.model.Motorista;
 import com.anatonelly.freteexpress.repository.MotoristaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Arrays;
-import java.util.HashMap; // Importar HashMap
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;   // Importar Map
+import java.util.Map;
 
 @Controller
 public class MotoristaHomeController {
 
-    @Autowired
-    private MotoristaRepository motoristaRepository;
+    private final MotoristaRepository motoristaRepository;
+
+    public MotoristaHomeController(MotoristaRepository motoristaRepository) {
+        this.motoristaRepository = motoristaRepository;
+    }
 
     @GetMapping({"/motorista/home", "/home"})
     public String showMotoristaHome(Model model) {
+        List<Motorista> motoristas = new ArrayList<>();
+
         try {
-            List<Motorista> motoristas = motoristaRepository.findAll();
+            // Recupera motoristas do banco
+            motoristas = motoristaRepository.findAll();
 
-            // --- INÍCIO DAS ALTERAÇÕES ---
-
-            // Se não houver motoristas, adicionar dados simulados (SUA LÓGICA EXISTENTE)
             if (motoristas.isEmpty()) {
-                Motorista m1 = new Motorista();
-                m1.setNomeCompleto("Fulano Ciciano Beltrano da Silva");
-                m1.setStatusPagamento("Pago");
-                m1.setAvaliacao(5);
-                m1.setId(1L); // Importante: adicione IDs para os motoristas simulados
-                // Isso é crucial para que o mapa de estrelas funcione corretamente.
-
-                Motorista m2 = new Motorista();
-                m2.setNomeCompleto("Fulano Ciciano Beltrano da Silva");
-                m2.setStatusPagamento("Pago");
-                m2.setAvaliacao(5);
-                m2.setId(2L);
-
-                Motorista m3 = new Motorista();
-                m3.setNomeCompleto("Fulano Ciciano Beltrano da Silva");
-                m3.setStatusPagamento("Pendente");
-                m3.setAvaliacao(0);
-                m3.setId(3L);
-
-                motoristas.addAll(Arrays.asList(m1, m2, m3));
+                // Removido o código de simulação de motoristas (m1, m2, m3)
             } else {
-                // Simulação de status de pagamento e avaliação para cada motorista existente
-                // CERTIFIQUE-SE DE QUE SEUS OBJETOS Motorista TÊM UM ID VÁLIDO.
-                // Se eles vierem do banco de dados, o ID já virá.
-                for (Motorista motorista : motoristas) {
-                    motorista.setStatusPagamento(motoristas.indexOf(motorista) % 2 == 0 ? "Pago" : "Pendente");
-                    motorista.setAvaliacao(motoristas.indexOf(motorista) % 2 == 0 ? 5 : 0);
+                // Simulação de status e avaliação para motoristas existentes
+                for (int i = 0; i < motoristas.size(); i++) {
+                    Motorista motorista = motoristas.get(i);
+                    if (motorista.getId() == null) {
+                        motorista.setId((long) (i + 1)); // Atribui IDs sequenciais se não houver
+                    }
+                    motorista.setStatusPagamento(i % 2 == 0 ? "Pago" : "Pendente");
+                    motorista.setAvaliacao(i % 2 == 0 ? 5 : 0);
+                }
+            }
+
+            // Criar mapa de estrelas de avaliação
+            Map<Long, String> estrelasAvaliacao = new HashMap<>();
+            for (Motorista motorista : motoristas) {
+                if (motorista.getId() != null) {
+                    estrelasAvaliacao.put(motorista.getId(), gerarEstrelas(motorista.getAvaliacao()));
                 }
             }
 
             model.addAttribute("gestores", motoristas); // Passa a lista de 'motoristas' como 'gestores' para o HTML
-
-            // Crie um mapa para associar o ID do motorista (gestor) com a string das estrelas
-            Map<Long, String> estrelasAvaliacao = new HashMap<>();
-            for (Motorista gestor : motoristas) {
-                // Adicione uma verificação para motoristas sem ID (ex: os simulados sem ID)
-                if (gestor.getId() != null) {
-                    estrelasAvaliacao.put(gestor.getId(), gerarEstrelas(gestor.getAvaliacao()));
-                }
-            }
-
             model.addAttribute("estrelasAvaliacao", estrelasAvaliacao); // Adicione o mapa ao modelo
-
-            // --- FIM DAS ALTERAÇÕES ---
 
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar dados: " + e.getMessage());
         }
+
+        model.addAttribute("motoristas", motoristas); // Mantido por compatibilidade
         return "homeMotorista";
     }
 
     // Método auxiliar para gerar a string das estrelas
     private String gerarEstrelas(int avaliacao) {
+        if (avaliacao < 0 || avaliacao > 5) {
+            avaliacao = 0; // Valor padrão se inválido
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < avaliacao; i++) {
             sb.append("★"); // Estrela preenchida
         }
-        for (int i = avaliacao; i < 5; i++) { // Garante 5 estrelas no total (preenchidas + vazias)
+        for (int i = avaliacao; i < 5; i++) {
             sb.append("☆"); // Estrela vazia
         }
         return sb.toString();

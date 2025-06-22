@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fretes - Motorista</title>
+    <link rel="stylesheet" th:href="@{/css/fretesMotorista.css}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Fretes Express</h2>
+        <a th:href="@{/motorista/home}">Home</a>
+        <a th:href="@{/motorista/fretes}" class="active">Fretes</a>
+        <a th:href="@{/cadastro}">Cadastro</a>
+        <a th:href="@{/login}">Sair</a>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <h2>Fretes</h2>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Pesquisar fretes...">
+            <button class="filter-btn">Filtros</button>
+        </div>
+
+        <!-- Frete Categories -->
+        <div class="frete-categories">
+            <!-- Pendentes -->
+            <div class="category pendentes">
+                <h3>
+                    Pendentes 
+                    <span th:text="${countPendentes}">0</span>
+                </h3>
+                <div class="frete-grid">
+                    <div class="frete-card" th:each="frete : ${fretes}" th:if="${frete.status.equals('Pendente')}">
+                        <h4 th:text="|${frete.origem} → ${frete.destino}|">Origem → Destino</h4>
+                        <p th:text="|Peso: ${frete.peso}kg|">Peso</p>
+                        <p th:text="|Valor: R$ ${#numbers.formatDecimal(frete.valorFrete, 2, 2)}|">Valor</p>
+                        <form th:action="@{/motorista/solicitar-frete}" method="post">
+                            <input type="hidden" name="freteId" th:value="${frete.id}">
+                            <button type="submit">Solicitar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aceitos -->
+            <div class="category aceitos">
+                <h3>
+                    Aceitos 
+                    <span th:text="${countAceitos}">0</span>
+                </h3>
+                <div class="frete-grid">
+                    <div class="frete-card" th:each="frete : ${fretes}" th:if="${frete.status.equals('Aceito')}">
+                        <h4 th:text="|${frete.origem} → ${frete.destino}|">Origem → Destino</h4>
+                        <p th:text="|Peso: ${frete.peso}kg|">Peso</p>
+                        <p th:text="|Valor: R$ ${#numbers.formatDecimal(frete.valorFrete, 2, 2)}|">Valor</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finalizados -->
+            <div class="category finalizados">
+                <h3>
+                    Finalizados 
+                    <span th:text="${countFinalizados}">0</span>
+                </h3>
+                <div class="frete-grid">
+                    <div class="frete-card" th:each="frete : ${fretes}" th:if="${frete.status.equals('Finalizado')}">
+                        <h4 th:text="|${frete.origem} → ${frete.destino}|">Origem → Destino</h4>
+                        <p th:text="|Peso: ${frete.peso}kg|">Peso</p>
+                        <p th:text="|Valor: R$ ${#numbers.formatDecimal(frete.valorFrete, 2, 2)}|">Valor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error/Message Display -->
+        <div class="error-message" th:if="${error}" th:text="${error}" style="color: red;"></div>
+        <div class="success-message" th:if="${message}" th:text="${message}" style="color: green;"></div>
+    </div>
+</body>
+</html>

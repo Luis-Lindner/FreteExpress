@@ -7,35 +7,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "AvaliacaoEmpresa") // Nome da tabela conforme o DB
 @Data
 @NoArgsConstructor
 public class AvaliacaoEmpresa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_avaliacao_empresa") // Mapeia para id_avaliacao_empresa no DB
+    private Integer idAvaliacaoEmpresa; // Usando Integer para consistência com o ER, mas Long é comum para IDs.
 
     @Column(nullable = false)
     @Min(0)
     @Max(5)
     private Integer nota;
 
-    @Column(length = 500)
+    @Column(length = 200)
     private String comentario;
 
-    @ManyToOne
-    @JoinColumn(name = "empresa_id", nullable = false)
-    private EmpresaCliente empresaCliente;
+    // Relacionamento com a entidade Empresa
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_empresa", nullable = false) // Nome da coluna FK no DB
+    private EmpresaCliente empresa;
 
-    @ManyToOne
-    @JoinColumn(name = "motorista_id", nullable = false)
+    // Relacionamento com a entidade Motorista
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_motorista", nullable = false) // Nome da coluna FK no DB
     private Motorista motorista;
-
-    public AvaliacaoEmpresa(Long id, Integer nota, String comentario, EmpresaCliente empresaCliente, Motorista motorista) {
-        this.id = id;
-        this.nota = nota;
-        this.comentario = comentario;
-        this.empresaCliente = empresaCliente;
-        this.motorista = motorista;
-    }
 }
