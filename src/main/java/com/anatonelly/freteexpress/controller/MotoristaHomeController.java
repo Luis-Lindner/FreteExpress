@@ -30,12 +30,16 @@ public class MotoristaHomeController {
 
             if (motoristas.isEmpty()) {
                 // Removido o código de simulação de motoristas (m1, m2, m3)
+                // Se a lista estiver vazia, pode ser útil adicionar alguns dados de teste aqui
+                // ou garantir que o banco tenha motoristas para testar.
             } else {
                 // Simulação de status e avaliação para motoristas existentes
                 for (int i = 0; i < motoristas.size(); i++) {
                     Motorista motorista = motoristas.get(i);
-                    if (motorista.getId() == null) {
-                        motorista.setId((long) (i + 1)); // Atribui IDs sequenciais se não houver
+                    // Verificação de ID: Se o ID é nulo, atribui um ID sequencial.
+                    // Ajustado para setIdMotorista e para Integer.
+                    if (motorista.getIdMotorista() == null) { // Usar getIdMotorista()
+                        motorista.setIdMotorista(i + 1); // Atribui IDs sequenciais se não houver (Integer)
                     }
                     motorista.setStatusPagamento(i % 2 == 0 ? "Pago" : "Pendente");
                     motorista.setAvaliacao(i % 2 == 0 ? 5 : 0);
@@ -43,10 +47,10 @@ public class MotoristaHomeController {
             }
 
             // Criar mapa de estrelas de avaliação
-            Map<Long, String> estrelasAvaliacao = new HashMap<>();
+            Map<Integer, String> estrelasAvaliacao = new HashMap<>(); // Chave do mapa para Integer (ID do motorista)
             for (Motorista motorista : motoristas) {
-                if (motorista.getId() != null) {
-                    estrelasAvaliacao.put(motorista.getId(), gerarEstrelas(motorista.getAvaliacao()));
+                if (motorista.getIdMotorista() != null) { // Usar getIdMotorista()
+                    estrelasAvaliacao.put(motorista.getIdMotorista(), gerarEstrelas(motorista.getAvaliacao())); // Usar getIdMotorista() e getAvaliacao()
                 }
             }
 
@@ -55,6 +59,7 @@ public class MotoristaHomeController {
 
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar dados: " + e.getMessage());
+            e.printStackTrace(); // Imprime o stack trace para depuração
         }
 
         model.addAttribute("motoristas", motoristas); // Mantido por compatibilidade

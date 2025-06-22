@@ -1,58 +1,29 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Estado")
+@Data // Garante getters e setters
+@NoArgsConstructor
 public class Estado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_estado")
     private Integer idEstado;
 
-    @Column(name = "nome", length = 45, nullable = false)
+    @Column(name = "nome", length = 45)
     private String nome;
 
+    @Column(name = "sigla", length = 45)
+    private String sigla; // Certifique-se que este atributo existe
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pais", nullable = false)
+    @JoinColumn(name = "id_pais")
     private Pais pais;
 
-
-    // --- Construtores ---
-
-    public Estado() {
-    }
-
-    public Estado(String nome, Pais pais) {
-        this.nome = nome;
-        this.pais = pais;
-    }
-
-
-    // --- Getters e Setters ---
-
-    public Integer getIdEstado() {
-        return idEstado;
-    }
-
-    public void setIdEstado(Integer idEstado) {
-        this.idEstado = idEstado;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Pais getPais() {
-        return pais;
-    }
-
-    public void setPais(Pais pais) {
-        this.pais = pais;
-    }
+    // Se você tiver algum setSigla() ou getSigla() manual aqui, remova-o.
+    // O @Data se encarrega disso.
 }

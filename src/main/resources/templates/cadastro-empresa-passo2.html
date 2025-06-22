@@ -24,9 +24,9 @@
     <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
     <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
 
-    <form th:action="@{/cadastro/empresa/concluir}" th:object="${empresa}" method="post">
-      <!-- Campos ocultos para manter os dados da Empresa e Endereço -->
-      <input type="hidden" th:field="*{idEmpresa}"> <!-- Para garantir que o ID seja repassado se houver -->
+    <form th:action="@{/cadastro/empresa/concluir}" th:object="${empresaCliente}" method="post"> <!-- Alterado th:object -->
+      <!-- Campos ocultos para manter os dados da EmpresaCliente e Endereço -->
+      <input type="hidden" th:field="*{idEmpresa}">
       <input type="hidden" th:field="*{email}">
       <input type="hidden" th:field="*{senha}">
       <input type="hidden" th:field="*{nome}">
@@ -34,7 +34,7 @@
       <input type="hidden" th:field="*{telefone}">
       <input type="hidden" th:field="*{descricao}">
       <input type="hidden" th:field="*{site}">
-      <!-- Campos do Endereço agora vêm da Empresa -->
+      <!-- Campos do Endereço agora vêm da EmpresaCliente -->
       <input type="hidden" th:field="*{endereco.idEndereco}">
       <input type="hidden" th:field="*{endereco.rua}">
       <input type="hidden" th:field="*{endereco.numero}">
