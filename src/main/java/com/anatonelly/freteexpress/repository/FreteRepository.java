@@ -1,5 +1,6 @@
 package com.anatonelly.freteexpress.repository;
 
+import com.anatonelly.freteexpress.model.EmpresaCliente;
 import com.anatonelly.freteexpress.model.Frete;
 import com.anatonelly.freteexpress.model.Motorista;
 import com.anatonelly.freteexpress.enums.StatusFrete;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface FreteRepository extends JpaRepository<Frete, Long> {
 
     List<Frete> findByMotoristaSolicitanteAndStatus(Motorista motorista, StatusFrete status);
-
+    List<Frete> findByEmpresaClienteOrderByPrazoEntregaDesc(EmpresaCliente empresaCliente);
 }

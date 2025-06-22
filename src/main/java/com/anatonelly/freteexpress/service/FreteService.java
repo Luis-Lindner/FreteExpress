@@ -1,5 +1,6 @@
 package com.anatonelly.freteexpress.service;
 
+import com.anatonelly.freteexpress.model.EmpresaCliente;
 import com.anatonelly.freteexpress.model.Frete;
 import com.anatonelly.freteexpress.model.Motorista;
 import com.anatonelly.freteexpress.enums.StatusFrete;
@@ -60,6 +61,10 @@ public class FreteService {
 
     public List<Frete> getFretesFinalizadosPorMotorista(Motorista motorista) {
         return freteRepository.findByMotoristaSolicitanteAndStatus(motorista, StatusFrete.FINALIZADO);
+    }
+
+    public List<Frete> findByEmpresa(EmpresaCliente empresaCliente) {
+        return freteRepository.findByEmpresaClienteOrderByPrazoEntregaDesc(empresaCliente);
     }
 
     public boolean solicitarFrete(Long freteId, Long motoristaId) {
