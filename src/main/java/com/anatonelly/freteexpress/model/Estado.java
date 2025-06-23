@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Estado")
-@Data // Garante getters e setters
-@NoArgsConstructor
+@Data
+@NoArgsConstructor // Necessário para o JPA
 public class Estado {
 
     @Id
@@ -18,12 +18,16 @@ public class Estado {
     private String nome;
 
     @Column(name = "sigla", length = 45)
-    private String sigla; // Certifique-se que este atributo existe
+    private String sigla;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pais")
     private Pais pais;
 
-    // Se você tiver algum setSigla() ou getSigla() manual aqui, remova-o.
-    // O @Data se encarrega disso.
+    // ADICIONE ESTE CONSTRUTOR MANUALMENTE
+    // Ele corresponde exatamente ao que seu serviço precisa
+    public Estado(String nome, Pais pais) {
+        this.nome = nome;
+        this.pais = pais;
+    }
 }

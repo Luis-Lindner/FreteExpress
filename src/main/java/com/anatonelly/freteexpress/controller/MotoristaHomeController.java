@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,54 +21,48 @@ public class MotoristaHomeController {
 
     @GetMapping({"/motorista/home", "/home"})
     public String showMotoristaHome(Model model) {
-        List<Motorista> motoristas = new ArrayList<>();
-
         try {
-            // Recupera motoristas do banco
-            motoristas = motoristaRepository.findAll();
+            List<Motorista> motoristas = motoristaRepository.findAll();
 
-            if (motoristas.isEmpty()) {
-                // Removido o código de simulação de motoristas (m1, m2, m3)
-                // Se a lista estiver vazia, pode ser útil adicionar alguns dados de teste aqui
-                // ou garantir que o banco tenha motoristas para testar.
-            } else {
-                // Simulação de status e avaliação para motoristas existentes
-                for (int i = 0; i < motoristas.size(); i++) {
-                    Motorista motorista = motoristas.get(i);
-                    // Verificação de ID: Se o ID é nulo, atribui um ID sequencial.
-                    // Ajustado para setIdMotorista e para Integer.
-                    if (motorista.getIdMotorista() == null) { // Usar getIdMotorista()
-                        motorista.setIdMotorista(i + 1); // Atribui IDs sequenciais se não houver (Integer)
-                    }
-                    motorista.setStatusPagamento(i % 2 == 0 ? "Pago" : "Pendente");
-                    motorista.setAvaliacao(i % 2 == 0 ? 5 : 0);
-                }
+            // Mapas para guardar os dados de exibição que não estão no modelo Motorista
+            Map<Long, String> statusPagamentoMap = new HashMap<>();
+            Map<Long, String> estrelasAvaliacaoMap = new HashMap<>();
+
+            // Itera sobre os motoristas para gerar os dados de exibição
+            for (int i = 0; i < motoristas.size(); i++) {
+                Motorista motorista = motoristas.get(i);
+                Long motoristaId = motorista.getId(); // CORRIGIDO: Usa o método correto getId()
+
+                // Lógica para gerar status e avaliação (não altera mais o objeto motorista)
+                String status = (i % 2 == 0) ? "Pago" : "Pendente";
+                int avaliacao = (i % 2 == 0) ? 5 : 4; // Exemplo de avaliação
+
+                // Armazena os dados gerados nos mapas, usando o ID do motorista como chave
+                statusPagamentoMap.put(motoristaId, status);
+                estrelasAvaliacaoMap.put(motoristaId, gerarEstrelas(avaliacao));
             }
 
-            // Criar mapa de estrelas de avaliação
-            Map<Integer, String> estrelasAvaliacao = new HashMap<>(); // Chave do mapa para Integer (ID do motorista)
-            for (Motorista motorista : motoristas) {
-                if (motorista.getIdMotorista() != null) { // Usar getIdMotorista()
-                    estrelasAvaliacao.put(motorista.getIdMotorista(), gerarEstrelas(motorista.getAvaliacao())); // Usar getIdMotorista() e getAvaliacao()
-                }
-            }
-
-            model.addAttribute("gestores", motoristas); // Passa a lista de 'motoristas' como 'gestores' para o HTML
-            model.addAttribute("estrelasAvaliacao", estrelasAvaliacao); // Adicione o mapa ao modelo
+            // Adiciona a lista de motoristas e os mapas ao modelo para o HTML usar
+            model.addAttribute("motoristas", motoristas);
+            model.addAttribute("statusPagamentoMap", statusPagamentoMap);
+            model.addAttribute("estrelasAvaliacao", estrelasAvaliacaoMap);
 
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar dados: " + e.getMessage());
-            e.printStackTrace(); // Imprime o stack trace para depuração
+            e.printStackTrace(); // Imprime o erro no console para depuração
         }
 
-        model.addAttribute("motoristas", motoristas); // Mantido por compatibilidade
         return "homeMotorista";
     }
 
-    // Método auxiliar para gerar a string das estrelas
+    /**
+     * Método auxiliar para gerar a representação em estrelas de uma avaliação numérica.
+     * @param avaliacao um número de 0 a 5.
+     * @return uma string com estrelas preenchidas e vazias.
+     */
     private String gerarEstrelas(int avaliacao) {
         if (avaliacao < 0 || avaliacao > 5) {
-            avaliacao = 0; // Valor padrão se inválido
+            avaliacao = 0; // Garante que a avaliação esteja no intervalo [0, 5]
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < avaliacao; i++) {
