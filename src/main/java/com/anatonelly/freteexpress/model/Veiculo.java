@@ -9,6 +9,17 @@ public class Veiculo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Campos adicionados
+    @Column(unique = true)
+    private String placa;
+
+    @Column
+    private String modelo;
+
+    @Column
+    private Integer ano;
+    // Fim dos campos adicionados
+
     private String numeroRenavam;
     private String especificacoes;
     private Double altura;
@@ -30,6 +41,30 @@ public class Veiculo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public Integer getAno() {
+        return ano;
+    }
+
+    public void setAno(Integer ano) {
+        this.ano = ano;
     }
 
     public String getNumeroRenavam() {
@@ -112,4 +147,3 @@ public class Veiculo {
         this.motorista = motorista;
     }
 }
-

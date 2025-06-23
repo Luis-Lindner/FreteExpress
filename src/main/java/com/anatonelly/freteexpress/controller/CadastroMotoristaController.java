@@ -1,51 +1,46 @@
 package com.anatonelly.freteexpress.controller;
 
+import com.anatonelly.freteexpress.dto.CadastroMotoristaDTO;
+import com.anatonelly.freteexpress.service.CadastroMotoristaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CadastroMotoristaController {
 
+    @Autowired
+    private CadastroMotoristaService cadastroMotoristaService;
+
     @GetMapping("/cadastro")
-    public ModelAndView showCadastro() {
-        return new ModelAndView("cadastroMotorista");
+    public String showCadastro(Model model) {
+        // Adiciona o DTO ao modelo para o data binding do formulário
+        model.addAttribute("motoristaDTO", new CadastroMotoristaDTO());
+        return "cadastroMotorista";
     }
 
     @PostMapping("/finalizar-cadastro")
-    public ModelAndView processCadastro(
-            @RequestParam String email,
-            @RequestParam String senha,
-            @RequestParam String nome,
-            @RequestParam String cpf,
-            @RequestParam String endereco,
-            @RequestParam String cidade,
-            @RequestParam String estado,
-            @RequestParam String celular,
-            @RequestParam("foto") MultipartFile foto,
-            @RequestParam String placa,
-            @RequestParam String modelo,
-            @RequestParam int ano,
-            @RequestParam String tipo) {
-        // Processa todos os dados do cadastro
-        System.out.println("Email: " + email);
-        System.out.println("Senha: " + senha);
-        System.out.println("Nome: " + nome);
-        System.out.println("CPF: " + cpf);
-        System.out.println("Endereço: " + endereco);
-        System.out.println("Cidade: " + cidade);
-        System.out.println("Estado: " + estado);
-        System.out.println("Celular: " + celular);
-        System.out.println("Foto: " + (foto != null ? foto.getOriginalFilename() : "Nenhuma foto"));
-        System.out.println("Placa: " + placa);
-        System.out.println("Modelo: " + modelo);
-        System.out.println("Ano: " + ano);
-        System.out.println("Tipo de Veículo: " + tipo);
+    public String processCadastro(
+            @ModelAttribute("motoristaDTO") CadastroMotoristaDTO motoristaDTO,
+            RedirectAttributes redirectAttributes) {
 
-        // Redireciona para a página de login após o cadastro
-        return new ModelAndView("redirect:/login");
+        try {
+            cadastroMotoristaService.cadastrarNovoMotorista(motoristaDTO);
+        } catch (Exception e) {
+            // Imprime o erro no console para depuração
+            e.printStackTrace();
+            // Adiciona uma mensagem de erro para o usuário
+            redirectAttributes.addFlashAttribute("errorMessage", "Erro ao finalizar cadastro: " + e.getMessage());
+            return "redirect:/cadastro";
+        }
+
+        // Redireciona para a página de login com mensagem de sucesso
+        redirectAttributes.addFlashAttribute("successMessage", "Cadastro realizado com sucesso! Faça seu login.");
+        return "redirect:/login";
     }
 }
