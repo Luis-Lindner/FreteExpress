@@ -35,21 +35,18 @@ public class HistoricoFreteEmpresaController {
             return "redirect:/login";
         }
         String emailEmpresa = auth.getName();
-
         EmpresaCliente empresaLogada = empresaClienteService.findByEmail(emailEmpresa);
 
         if (empresaLogada == null) {
             model.addAttribute("error", "Empresa não encontrada para o usuário logado.");
             model.addAttribute("fretes", Collections.emptyList());
-            return "empresa-historico"; // Nome do arquivo HTML
+            return "empresa/historico-fretes"; // Caminho do template organizado
         }
 
         List<Frete> historicoFretes = freteService.findByEmpresa(empresaLogada);
-
-        // 4. Adiciona os dados ao 'Model' para que a página HTML possa acessá-los
         model.addAttribute("fretes", historicoFretes);
         model.addAttribute("nomeEmpresa", empresaLogada.getNome());
 
-        return "empresa-historico";
+        return "empresa/historico-fretes"; // Caminho do template organizado
     }
 }

@@ -37,6 +37,18 @@ public class Frete {
     @Column(nullable = false)
     private StatusFrete status;
 
+    // --- INÍCIO DAS NOVAS MELHORIAS ---
+    // Adicionando os campos para a tela de detalhes. Eles serão criados como novas
+    // colunas no seu banco de dados na próxima vez que a aplicação iniciar,
+    // graças ao 'spring.jpa.hibernate.ddl-auto=update'.
+
+    private String veiculosApropriados;
+
+    private String tipoCarroceria;
+
+    // --- FIM DAS NOVAS MELHORIAS ---
+
+
     // Relacionamento com a entidade EmpresaCliente
     @ManyToOne
     @JoinColumn(name = "empresa_id")
@@ -58,7 +70,7 @@ public class Frete {
     }
 
 
-    // --- Getters e Setters ---
+    // --- Getters e Setters EXISTENTES (NENHUM FOI ALTERADO) ---
 
     public Long getId() {
         return id;
@@ -154,5 +166,23 @@ public class Frete {
 
     public void setMotoristaSolicitante(Motorista motoristaSolicitante) {
         this.motoristaSolicitante = motoristaSolicitante;
+    }
+
+    // --- GETTERS E SETTERS PARA OS NOVOS CAMPOS ---
+
+    public String getVeiculosApropriados() {
+        return veiculosApropriados;
+    }
+
+    public void setVeiculosApropriados(String veiculosApropriados) {
+        this.veiculosApropriados = veiculosApropriados;
+    }
+
+    public String getTipoCarroceria() {
+        return tipoCarroceria;
+    }
+
+    public void setTipoCarroceria(String tipoCarroceria) {
+        this.tipoCarroceria = tipoCarroceria;
     }
 }

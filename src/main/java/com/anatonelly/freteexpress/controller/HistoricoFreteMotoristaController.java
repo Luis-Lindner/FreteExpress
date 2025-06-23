@@ -4,7 +4,6 @@ import com.anatonelly.freteexpress.model.Frete;
 import com.anatonelly.freteexpress.model.Motorista;
 import com.anatonelly.freteexpress.service.FreteService;
 import com.anatonelly.freteexpress.service.MotoristaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,42 +11,43 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
 @RequestMapping("/motorista/historico")
 public class HistoricoFreteMotoristaController {
 
-    @Autowired
-    private FreteService freteMotoristaService;
+    // 1. Injeção de dependências via construtor (melhor prática)
+    private final FreteService freteService;
+    private final MotoristaService motoristaService;
 
-    @Autowired
-    private MotoristaService motoristaService;
+    public HistoricoFreteMotoristaController(FreteService freteService, MotoristaService motoristaService) {
+        this.freteService = freteService;
+        this.motoristaService = motoristaService;
+    }
 
     @GetMapping
     public String showHistoricoFretes(Model model) {
-        // Obtém o usuário autenticado
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal() == "anonymousUser") {
-            model.addAttribute("error", "Você precisa estar logado para visualizar o histórico.");
-            return "historico-fretes";
+
+        // 2. Verificação de autenticação corrigida e com redirecionamento
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            return "redirect:/login"; // Redireciona para a página de login
         }
 
-        // Recupera o motorista com base no username (email ou outro identificador)
-        String username = auth.getName(); // Geralmente o email ou username
-        Motorista motorista = motoristaService.findByEmail(username); // Ajuste conforme o campo de autenticação
+        String username = auth.getName();
+        Motorista motorista = motoristaService.findByEmail(username);
 
         if (motorista == null) {
             model.addAttribute("error", "Motorista não encontrado para o usuário logado.");
-            return "historico-fretes";
+            model.addAttribute("fretes", Collections.emptyList());
+            return "motorista/historico-fretes"; // 3. Caminho do template organizado
         }
 
-        try {
-            List<Frete> fretesFinalizados = freteMotoristaService.getFretesFinalizadosPorMotorista(motorista);
-            model.addAttribute("fretes", fretesFinalizados);
-        } catch (Exception e) {
-            model.addAttribute("error", "Erro ao carregar o histórico de fretes: " + e.getMessage());
-        }
-        return "historico-fretes";
+        List<Frete> fretesFinalizados = freteService.getFretesFinalizadosPorMotorista(motorista);
+        model.addAttribute("fretes", fretesFinalizados);
+
+        return "motorista/historico-fretes"; // 3. Caminho do template organizado
     }
 }

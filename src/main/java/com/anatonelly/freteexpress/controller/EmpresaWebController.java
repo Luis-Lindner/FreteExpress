@@ -1,4 +1,4 @@
-package com.anatonelly.freteexpress.controller.web;
+package com.anatonelly.freteexpress.controller;
 
 import com.anatonelly.freteexpress.model.Motorista;
 import com.anatonelly.freteexpress.service.MotoristaService;
