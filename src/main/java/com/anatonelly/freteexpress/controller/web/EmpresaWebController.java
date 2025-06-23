@@ -35,7 +35,7 @@ public class EmpresaWebController {
         model.addAttribute("motoristas", motoristas);
         model.addAttribute("estrelasMap", estrelasMap);
 
-        return "home"; // Retorna o template empresa/home.html
+        return "home"; // Retorna o template empresa/homeEmpresa.html
     }
 
     // Método que gera a string das estrelas

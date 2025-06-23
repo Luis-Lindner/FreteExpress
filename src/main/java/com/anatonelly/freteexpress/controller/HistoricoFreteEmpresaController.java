@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional; // Import para Optional
 
 @Controller
 @RequestMapping("/empresa/historico")
@@ -32,11 +33,12 @@ public class HistoricoFreteEmpresaController {
     public String exibirHistorico(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-            return "redirect:/login";
+            return "redirect:/login"; // Redireciona para login se não autenticado
         }
         String emailEmpresa = auth.getName();
 
-        EmpresaCliente empresaLogada = empresaClienteService.findByEmail(emailEmpresa);
+        // CORRIGIDO: Trata o Optional retornado por findByEmail()
+        EmpresaCliente empresaLogada = empresaClienteService.findByEmail(emailEmpresa).orElse(null);
 
         if (empresaLogada == null) {
             model.addAttribute("error", "Empresa não encontrada para o usuário logado.");
@@ -46,9 +48,9 @@ public class HistoricoFreteEmpresaController {
 
         List<Frete> historicoFretes = freteService.findByEmpresa(empresaLogada);
 
-        // 4. Adiciona os dados ao 'Model' para que a página HTML possa acessá-los
+        // Adiciona os dados ao 'Model' para que a página HTML possa acessá-los
         model.addAttribute("fretes", historicoFretes);
-        model.addAttribute("nomeEmpresa", empresaLogada.getNome());
+        model.addAttribute("nomeEmpresa", empresaLogada.getNome()); // Adicione o nome ou razão social da empresa
 
         return "empresa-historico";
     }

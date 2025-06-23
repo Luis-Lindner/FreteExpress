@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Home - Frete Express</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início Motorista Página</title>
     <link rel="stylesheet" th:href="@{/css/homeMotorista.css}">
 </head>
 <body>
@@ -12,38 +13,56 @@
         <span>FRETES <strong>EXPRESS</strong></span>
     </div>
     <a href="/motorista/home" class="active">Home</a>
-    <a href="/fretes">Fretes</a>
-    <a href="/historico/fretes">Histórico de Fretes</a>
+    <a href="/motorista/fretes">Fretes</a>
+    <a href="/motorista/historico">Histórico de Fretes</a>
     <a href="/empresas">Empresas</a>
+
+    <div class="user-info">
+        <p>Logado como:</p>
+        <!-- Agora acessa as propriedades diretamente do principal injetado pelo Spring Security -->
+        <p><span sec:authentication="principal.nomeCompleto">Nome do Motorista</span></p>
+        <p>Email: <span sec:authentication="principal.email"></span></p>
+
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn logout-btn">Sair</button>
+        </form>
+    </div>
 </div>
 
 <div class="content">
     <div class="header">
         <h2>Home</h2>
+        <div th:if="${error}" class="error-message" th:text="${error}"></div>
     </div>
+
+    <h3>Gestores / Empresas Cadastradas</h3>
     <table>
         <thead>
         <tr>
-            <th>Gestores/Empresas</th>
+            <th>Nome Completo</th>
             <th>Status de Pagamento</th>
-            <th>Ações</th>
+            <th>Avaliação</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="motorista : ${gestores}">
             <td th:text="${motorista.nomeCompleto}"></td>
             <td>
-                <span th:class="'status-' + ${motorista.statusPagamento.toLowerCase()}" th:text="${motorista.statusPagamento}"></span>
+                <span th:class="'status-' + ${motorista.statusPagamento?.toLowerCase()}" th:text="${motorista.statusPagamento}"></span>
             </td>
             <td>
-                <span th:if="${motorista.avaliacao > 0}" class="avaliacao"
-                      th:text="${estrelasAvaliacao[motorista.id]}"></span>
-                <button th:if="${motorista.avaliacao == 0}" class="aguardando">Aguardando</button>
+                <!-- CORRIGIDO AQUI: motorista.id para motorista.idMotorista -->
+                <span th:if="${motorista.avaliacao != null and motorista.avaliacao > 0}" class="avaliacao"
+                      th:text="${estrelasAvaliacao[motorista.idMotorista]}"></span>
+                <button th:if="${motorista.avaliacao == null or motorista.avaliacao == 0}" class="aguardando">Aguardando Avaliação</button>
             </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(gestores)}">
+            <td colspan="3">Nenhum gestor/motorista encontrado.</td>
         </tr>
         </tbody>
     </table>
-    <div th:if="${error}" class="error-message" th:text="${error}"></div>
 </div>
 </body>
 </html>

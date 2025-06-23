@@ -1,115 +1,94 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "Veiculo") // Nome da tabela no DB
+@Data // Garante getters e setters
+@NoArgsConstructor
 public class Veiculo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_veiculo") // Mapeia para id_veiculo no DB (INT)
+    private Integer idVeiculo;
 
-    private String numeroRenavam;
-    private String especificacoes;
-    private Double altura;
-    private Double comprimento;
-    private Double largura;
-    private Integer quantidadeEixos;
-    private Boolean possuiLona;
-    private String categoria;
-    private String tipoCarroceria;
+    // ATRIBUTOS DE RELACIONAMENTO (FKs)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_carroceria") // Mapeia para id_carroceria no DB (INT)
+    private Carroceria carroceria; // Assumindo que você tem uma classe Carroceria
 
-    @OneToOne
-    @JoinColumn(name = "motorista_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_veiculo") // Mapeia para id_tipo_veiculo no DB (INT)
+    private TipoVeiculo tipoVeiculo; // Assumindo que você tem uma classe TipoVeiculo
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_motorista") // Mapeia para id_motorista no DB (INT)
     private Motorista motorista;
 
+    // --- ATRIBUTOS ADICIONADOS PARA RESOLVER ERROS ---
+    @Column(name = "placa", length = 8) // Exemplo de tamanho, ajuste conforme DB
+    private String placa;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "modelo", length = 100) // Exemplo de tamanho
+    private String modelo;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "ano") // Ano pode ser Integer no Java e INT no DB
+    private Integer ano;
 
-    public String getNumeroRenavam() {
-        return numeroRenavam;
-    }
+    @Column(name = "tipo", length = 50) // 'tipo' aqui refere-se ao 'tipo' vindo do formulário, pode ser o nome
+    private String tipo;
 
-    public void setNumeroRenavam(String numeroRenavam) {
-        this.numeroRenavam = numeroRenavam;
-    }
+    // Outros campos existentes, caso não estejam no DTO
+    @Column(name = "ant", length = 8) // Verifique o tipo no DB
+    private String ant;
 
-    public String getEspecificacoes() {
-        return especificacoes;
-    }
+    @Column(name = "renavam", length = 11, unique = true) // Renavam deve ser único
+    private String renavam;
 
-    public void setEspecificacoes(String especificacoes) {
-        this.especificacoes = especificacoes;
-    }
+    @Column(name = "eixos")
+    private Integer eixos;
 
-    public Double getAltura() {
-        return altura;
-    }
+    @Column(name = "lona") // TINYINT no DB pode ser Boolean ou Byte no Java
+    private Boolean lona; // Assumindo TINYINT como Boolean no Java
 
-    public void setAltura(Double altura) {
-        this.altura = altura;
-    }
 
-    public Double getComprimento() {
-        return comprimento;
-    }
+    // --- ATRIBUTOS JÁ EXISTENTES NO SEU SCRIPT SQL (Se não estiverem no seu modelo, adicione-os) ---
+    // Hibernate: add column altura float(53)
+    @Column(name = "altura")
+    private Double altura; // ou float
 
-    public void setComprimento(Double comprimento) {
-        this.comprimento = comprimento;
-    }
+    // Hibernate: add column categoria varchar(255)
+    @Column(name = "categoria")
+    private String categoria;
 
-    public Double getLargura() {
-        return largura;
-    }
+    // Hibernate: add column comprimento float(53)
+    @Column(name = "comprimento")
+    private Double comprimento; // ou float
 
-    public void setLargura(Double largura) {
-        this.largura = largura;
-    }
+    // Hibernate: add column especificacoes varchar(255)
+    @Column(name = "especificacoes")
+    private String especificacoes;
 
-    public Integer getQuantidadeEixos() {
-        return quantidadeEixos;
-    }
+    // Hibernate: add column largura float(53)
+    @Column(name = "largura")
+    private Double largura; // ou float
 
-    public void setQuantidadeEixos(Integer quantidadeEixos) {
-        this.quantidadeEixos = quantidadeEixos;
-    }
+    // Hibernate: add column numeroRenavam varchar(255)
+    @Column(name = "numero_renavam") // O log pode mostrar numeroRenavam como numero_renavam
+    private String numeroRenavam;
 
-    public Boolean getPossuiLona() {
-        return possuiLona;
-    }
+    // Hibernate: add column possuiLona bit
+    @Column(name = "possui_lona") // O log pode mostrar possuiLona como possui_lona
+    private Boolean possuiLona;
 
-    public void setPossuiLona(Boolean possuiLona) {
-        this.possuiLona = possuiLona;
-    }
+    // Hibernate: add column quantidadeEixos integer
+    @Column(name = "quantidade_eixos") // O log pode mostrar quantidadeEixos como quantidade_eixos
+    private Integer quantidadeEixos;
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getTipoCarroceria() {
-        return tipoCarroceria;
-    }
-
-    public void setTipoCarroceria(String tipoCarroceria) {
-        this.tipoCarroceria = tipoCarroceria;
-    }
-
-    public Motorista getMotorista() {
-        return motorista;
-    }
-
-    public void setMotorista(Motorista motorista) {
-        this.motorista = motorista;
-    }
+    // Hibernate: add column tipoCarroceria varchar(255)
+    @Column(name = "tipo_carroceria") // O log pode mostrar tipoCarroceria como tipo_carroceria
+    private String tipoCarroceria;
 }
-

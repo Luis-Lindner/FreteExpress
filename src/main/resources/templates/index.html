@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bem-vindo ao Fretes Express</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f2f5;
+        margin: 0;
+    }
+    .main-container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 400px;
+    }
+    .logo-section {
+        margin-bottom: 30px;
+    }
+    .logo-section img {
+        width: 100px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    .logo-section h2 {
+        font-size: 1.8em;
+        color: #333;
+        margin: 0;
+    }
+    .logo-section strong {
+        color: #0056b3;
+    }
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .btn {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        color: white; /* Cor padrão para todos os botões */
+    }
+    .btn.login-motorista {
+        background-color: #007bff;
+    }
+    .btn.login-motorista:hover {
+        background-color: #0056b3;
+    }
+    .btn.login-empresa {
+        background-color: #28a745;
+    }
+    .btn.login-empresa:hover {
+        background-color: #218838;
+    }
+    .btn.cadastro-motorista, .btn.cadastro-empresa {
+        background-color: #6c757d; /* Cinza */
+    }
+    .btn.cadastro-motorista:hover, .btn.cadastro-empresa:hover {
+        background-color: #5a6268;
+    }
+    .message {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    .message.success {
+        color: #28a745;
+    }
+    .message.error {
+        color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <div class="logo-section">
+    <img src="/img/logoAnatonnely.png" alt="Fretes Express Logo">
+    <h2>FRETES <strong>EXPRESS</strong></h2>
+  </div>
+  <h3>Escolha seu perfil:</h3>
+
+  <div th:if="${successMessage}" class="message success" th:text="${successMessage}"></div>
+  <div th:if="${errorMessage}" class="message error" th:text="${errorMessage}"></div>
+  <div th:if="${param.logout}" class="message success">Você foi desconectado com sucesso.</div>
+
+  <div class="button-group">
+    <a th:href="@{/login/motorista}" class="btn login-motorista">Login Motorista</a>
+    <a th:href="@{/login/empresa}" class="btn login-empresa">Login Empresa</a>
+    <a th:href="@{/cadastro}" class="btn cadastro-motorista">Cadastre-se como Motorista</a>
+    <a th:href="@{/cadastro/empresa/passo1}" class="btn cadastro-empresa">Cadastre-se como Empresa</a>
+  </div>
+</div>
+</body>
+</html>

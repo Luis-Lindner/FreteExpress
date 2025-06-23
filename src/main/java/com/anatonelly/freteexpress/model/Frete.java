@@ -1,158 +1,107 @@
 package com.anatonelly.freteexpress.model;
 
-import com.anatonelly.freteexpress.enums.StatusFrete; // Garanta que este caminho está correto
 import jakarta.persistence.*;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.anatonelly.freteexpress.enums.StatusFrete;
+import java.time.LocalDateTime; // Para prazoEntrega, se for o caso
+// import java.math.BigDecimal; // Se você preferir BigDecimal para preco
 
 @Entity
-@Table(name = "fretes")
+@Table(name = "Frete")
+@Data
+@NoArgsConstructor
 public class Frete {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_frete")
+    private Integer idFrete;
 
-    @Column(nullable = false)
-    private String origem;
-
-    @Column(nullable = false)
-    private String destino;
-
-    @Column(nullable = false)
-    private String tipoCarga;
-
-    private Double peso;
-    private String dimensoes;
-    private LocalDateTime prazoEntrega;
-    private String descricaoCarga;
-
-    // É uma boa prática usar BigDecimal para valores monetários para evitar erros de arredondamento
-    private BigDecimal valorFrete;
-
-    // O campo corrigido que usa o Enum.
-    // O JPA salvará o nome do status (ex: "PENDENTE") como texto no banco de dados.
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusFrete status;
-
-    // Relacionamento com a entidade EmpresaCliente
-    @ManyToOne
-    @JoinColumn(name = "empresa_id")
-    private EmpresaCliente empresaCliente;
-
-    // Relacionamento com a entidade Motorista
-    @ManyToOne
-    @JoinColumn(name = "motorista_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_motorista") // Verifica no seu DB se é id_motorista
     private Motorista motoristaSolicitante;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_endereco_origem")
+    private Endereco origem;
 
-    // --- Construtores ---
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_endereco_destino")
+    private Endereco destino;
 
-    /**
-     * Construtor padrão sem argumentos.
-     * O JPA precisa dele para criar instâncias da entidade.
-     */
-    public Frete() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id") // Verifica no seu DB se é empresa_id
+    private EmpresaCliente empresaCliente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_veiculo")
+    private TipoVeiculo tipoVeiculo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_carroceria")
+    private Carroceria carroceria;
 
 
-    // --- Getters e Setters ---
+    @Column(name = "produto", length = 45)
+    private String produto;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "preco")
+    private Double preco; // ou BigDecimal
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "complemento") // TINYINT no DB
+    private Boolean complemento;
 
-    public String getOrigem() {
-        return origem;
-    }
+    @Column(name = "rastreador") // TINYINT no DB
+    private Boolean rastreador;
 
-    public void setOrigem(String origem) {
-        this.origem = origem;
-    }
+    @Column(name = "obs", length = 500)
+    private String obs;
 
-    public String getDestino() {
-        return destino;
-    }
+    @Column(name = "volume")
+    private Integer volume;
 
-    public void setDestino(String destino) {
-        this.destino = destino;
-    }
+    @Column(name = "pesoTotal")
+    private Integer pesoTotal;
 
-    public String getTipoCarga() {
-        return tipoCarga;
-    }
+    @Column(name = "formaPagamento", length = 20)
+    private String formaPagamento;
 
-    public void setTipoCarga(String tipoCarga) {
-        this.tipoCarga = tipoCarga;
-    }
+    @Column(name = "adiantamento", length = 4)
+    private String adiantamento;
 
-    public Double getPeso() {
-        return peso;
-    }
+    @Column(name = "pedagio") // TINYINT no DB
+    private Boolean pedagio;
 
-    public void setPeso(Double peso) {
-        this.peso = peso;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 20, nullable = false)
+    private StatusFrete status;
 
-    public String getDimensoes() {
-        return dimensoes;
-    }
+    // --- ATRIBUTOS ADICIONADOS / VERIFICADOS COM BASE NO ERRO ---
+    // Estes são os campos que seu FreteService esperava no Frete
+    @Column(name = "tipo_carga") // Assumindo nome de coluna para tipoCarga
+    private String tipoCarga;
 
-    public void setDimensoes(String dimensoes) {
-        this.dimensoes = dimensoes;
-    }
+    @Column(name = "peso") // Este deve ser float(53) no DB, mapeia para Double
+    private Double peso;
 
-    public LocalDateTime getPrazoEntrega() {
-        return prazoEntrega;
-    }
+    @Column(name = "dimensoes") // Exemplo de coluna para Dimensoes
+    private String dimensoes; // Pode ser String se for texto, ou um JSON/Embedded
 
-    public void setPrazoEntrega(LocalDateTime prazoEntrega) {
-        this.prazoEntrega = prazoEntrega;
-    }
+    @Column(name = "prazo_entrega") // Assumindo nome de coluna para prazoEntrega
+    private LocalDateTime prazoEntrega; // Mapeia para datetime(6) no DB
 
-    public String getDescricaoCarga() {
-        return descricaoCarga;
-    }
+    @Column(name = "descricao_carga") // Assumindo nome de coluna para descricaoCarga
+    private String descricaoCarga;
 
-    public void setDescricaoCarga(String descricaoCarga) {
-        this.descricaoCarga = descricaoCarga;
-    }
+    @Column(name = "valor_frete") // Assumindo nome de coluna para valorFrete
+    private Double valorFrete; // Mapeia para decimal(38,2) no DB, Double funciona
 
-    public BigDecimal getValorFrete() {
-        return valorFrete;
-    }
-
-    public void setValorFrete(BigDecimal valorFrete) {
-        this.valorFrete = valorFrete;
-    }
-
-    public StatusFrete getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusFrete status) {
-        this.status = status;
-    }
-
-    public EmpresaCliente getEmpresaCliente() {
-        return empresaCliente;
-    }
-
-    public void setEmpresaCliente(EmpresaCliente empresaCliente) {
-        this.empresaCliente = empresaCliente;
-    }
-
-    public Motorista getMotoristaSolicitante() {
-        return motoristaSolicitante;
-    }
-
-    public void setMotoristaSolicitante(Motorista motoristaSolicitante) {
-        this.motoristaSolicitante = motoristaSolicitante;
-    }
+    // Outros atributos do seu script SQL que devem estar aqui:
+    // ant CHAR(8), renavam CHAR(11) etc. (do Veiculo, mas alguns Frete podem ter isso diretamente)
+    // Se esses campos 'tipoCarga', 'dimensoes', 'prazoEntrega', 'descricaoCarga', 'valorFrete'
+    // não corresponderem exatamente aos nomes das colunas no seu DB,
+    // o Hibernate tentará usar a estratégia de nomenclatura e pode falhar.
+    // VERIFIQUE NO SEU SCRIPT SQL ORIGINAL SE ESSES NOMES SÃO IGUAIS AOS @Column(name="...")
+    // ou ajuste os @Column(name="") aqui para corresponderem ao seu DB existente.
 }
