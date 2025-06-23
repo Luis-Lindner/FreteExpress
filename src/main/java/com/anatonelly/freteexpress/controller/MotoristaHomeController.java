@@ -22,6 +22,8 @@ public class MotoristaHomeController {
     @GetMapping({"/motorista/home", "/home"})
     public String showMotoristaHome(Model model) {
         try {
+            // Para o motorista, mostramos uma lista de "empresas" (que são outros motoristas no sistema)
+            // Isso simula empresas/gestores que podem contratar o motorista
             List<Motorista> motoristas = motoristaRepository.findAll();
 
             // Mapas para guardar os dados de exibição que não estão no modelo Motorista
@@ -31,9 +33,9 @@ public class MotoristaHomeController {
             // Itera sobre os motoristas para gerar os dados de exibição
             for (int i = 0; i < motoristas.size(); i++) {
                 Motorista motorista = motoristas.get(i);
-                Long motoristaId = motorista.getId(); // CORRIGIDO: Usa o método correto getId()
+                Long motoristaId = motorista.getId();
 
-                // Lógica para gerar status e avaliação (não altera mais o objeto motorista)
+                // Lógica para gerar status e avaliação (simulação)
                 String status = (i % 2 == 0) ? "Pago" : "Pendente";
                 int avaliacao = (i % 2 == 0) ? 5 : 4; // Exemplo de avaliação
 
@@ -46,9 +48,13 @@ public class MotoristaHomeController {
             model.addAttribute("motoristas", motoristas);
             model.addAttribute("statusPagamentoMap", statusPagamentoMap);
             model.addAttribute("estrelasAvaliacao", estrelasAvaliacaoMap);
+            model.addAttribute("activePage", "home");
 
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar dados: " + e.getMessage());
+            model.addAttribute("motoristas", List.of()); // Lista vazia em caso de erro
+            model.addAttribute("statusPagamentoMap", new HashMap<>());
+            model.addAttribute("estrelasAvaliacao", new HashMap<>());
             e.printStackTrace(); // Imprime o erro no console para depuração
         }
 

@@ -8,78 +8,131 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" th:href="@{/css/estilosEmpresa.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
+<!-- Header Superior -->
 <header class="top-bar">
-    <div class="logo"><i class="bi bi-truck"></i> FRETES EXPRESS</div>
+    <div class="logo">
+        <i class="bi bi-truck"></i>
+        FRETES EXPRESS
+    </div>
     <div class="user-actions">
-        <i class="bi bi-bell-fill"></i>
-        <i class="bi bi-person-circle"></i>
+        <i class="bi bi-bell-fill" title="Notificações"></i>
+        <i class="bi bi-person-circle" title="Perfil"></i>
     </div>
 </header>
 
+<!-- Container Principal -->
 <div class="main-container">
-    <aside class="sidebar sidebar-clara">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/empresa/home}" th:classappend="${activePage == 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/empresa/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}"><i class="bi bi-box-seam-fill"></i> Fretes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/empresa/historico-fretes}" th:classappend="${activePage == 'historico-fretes' ? 'active' : ''}"><i class="bi bi-clock-history"></i> Histórico de Fretes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/empresa/motoristas}" th:classappend="${activePage == 'motoristas' ? 'active' : ''}"><i class="bi bi-people-fill"></i> Motoristas</a>
-            </li>
-        </ul>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="/img/logoAnatonnely.png" alt="Logo Fretes Express">
+            <div class="logo-text">
+                <span class="fretes">FRETES</span>
+                <span class="express">EXPRESS</span>
+            </div>
+        </div>
+
+        <nav>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/empresa/home}"
+                       th:classappend="${activePage == 'home' ? 'active' : ''}">
+                        <i class="bi bi-house-door-fill"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/empresa/dashboard}"
+                       th:classappend="${activePage == 'dashboard' ? 'active' : ''}">
+                        <i class="bi bi-box-seam-fill"></i>
+                        Fretes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/empresa/historico}"
+                       th:classappend="${activePage == 'historico-fretes' ? 'active' : ''}">
+                        <i class="bi bi-clock-history"></i>
+                        Histórico de Fretes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       th:href="@{/empresa/motoristas}"
+                       th:classappend="${activePage == 'motoristas' ? 'active' : ''}">
+                        <i class="bi bi-people-fill"></i>
+                        Motoristas
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </aside>
 
+    <!-- Conteúdo Principal -->
     <main class="content">
-        <h1 class="h2 mb-4"><i class="bi bi-house-door"></i> Home</h1>
+        <div class="content-header">
+            <i class="bi bi-house-door"></i>
+            Home
+        </div>
 
+        <!-- Seção de Motoristas -->
         <div class="meus-fretes-container">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="h5 mb-0"><i class="bi bi-people-fill"></i> Motoristas</h3>
+                <h3 class="h5 mb-0">
+                    <i class="bi bi-people-fill"></i>
+                    Motoristas
+                </h3>
                 <a href="#" class="text-decoration-none small">Ver Todos ></a>
             </div>
 
-            <table class="table table-hover align-middle">
-                <thead>
-                <tr>
-                    <th style="width: 40%;">Nome</th>
-                    <th style="width: 25%;">Status de pagamento</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="motorista : ${motoristas}">
-                    <td th:text="${motorista.nome}">Fulano Ciclano Beltrano da Silva</td>
-                    <td>
-                        <span th:if="${motorista.statusPagamento == 'Pago'}" class="badge bg-success">Pago</span>
-                        <span th:if="${motorista.statusPagamento == 'Pendente'}" class="badge bg-warning text-dark">Pendente</span>
-                    </td>
-                    <td>
-                        <span class="text-warning">
-                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
-                                <i th:if="${i <= motorista.avaliacao}" class="bi bi-star-fill"></i>
-                                <i th:if="${i > motorista.avaliacao}" class="bi bi-star"></i>
-                            </th:block>
-                        </span>
-                        <span class="badge bg-warning text-dark ms-2">Aguardando</span>
-                    </td>
-                </tr>
-                <tr th:if="${motoristas.isEmpty()}">
-                    <td colspan="3" class="text-center p-4">Nenhum motorista encontrado.</td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 40%;">Nome</th>
+                        <th style="width: 25%;">Status de pagamento</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="motorista : ${motoristas}">
+                        <td th:text="${motorista.nome}">Nome do Motorista</td>
+                        <td>
+                                    <span class="badge"
+                                          th:classappend="${statusPagamentoMap[motorista.id] == 'Pago' ? 'status-pago' : 'status-pendente'}"
+                                          th:text="${statusPagamentoMap[motorista.id]}">
+                                        Status
+                                    </span>
+                        </td>
+                        <td>
+                                    <span class="avaliacao"
+                                          th:text="${estrelasAvaliacao[motorista.id]}"
+                                          th:title="'Avaliação: ' + ${estrelasAvaliacao[motorista.id]}">
+                                        ★★★★★
+                                    </span>
+                            <span class="badge aguardando ms-2">Aguardando</span>
+                        </td>
+                    </tr>
+                    <tr th:if="${motoristas.isEmpty()}">
+                        <td colspan="3" class="text-center p-4">
+                            <i class="bi bi-inbox" style="font-size: 2rem; color: #adb5bd;"></i>
+                            <br>
+                            Nenhum motorista encontrado.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/empresaHome.js}"></script>
 </body>
 </html>

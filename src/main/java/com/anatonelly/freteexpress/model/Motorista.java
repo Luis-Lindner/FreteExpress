@@ -26,6 +26,21 @@ public class Motorista {
     @Column(unique = true)
     private String cnh;
 
+    // Novos campos adicionados para o cadastro
+    private String endereco;
+    private String cidade;
+    private String estado;
+    private String celular;
+
+    @Lob
+    private byte[] foto; // Para armazenar a foto como byte array
+
+    // Informações do veículo - podem ser movidas para uma entidade separada no futuro
+    private String placaVeiculo;
+    private String modeloVeiculo;
+    private Integer anoVeiculo;
+    private String tipoVeiculo;
+
     @OneToMany(mappedBy = "motoristaSolicitante")
     private List<Frete> fretes;
 
@@ -81,6 +96,78 @@ public class Motorista {
 
     public void setCnh(String cnh) {
         this.cnh = cnh;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public String getPlacaVeiculo() {
+        return placaVeiculo;
+    }
+
+    public void setPlacaVeiculo(String placaVeiculo) {
+        this.placaVeiculo = placaVeiculo;
+    }
+
+    public String getModeloVeiculo() {
+        return modeloVeiculo;
+    }
+
+    public void setModeloVeiculo(String modeloVeiculo) {
+        this.modeloVeiculo = modeloVeiculo;
+    }
+
+    public Integer getAnoVeiculo() {
+        return anoVeiculo;
+    }
+
+    public void setAnoVeiculo(Integer anoVeiculo) {
+        this.anoVeiculo = anoVeiculo;
+    }
+
+    public String getTipoVeiculo() {
+        return tipoVeiculo;
+    }
+
+    public void setTipoVeiculo(String tipoVeiculo) {
+        this.tipoVeiculo = tipoVeiculo;
     }
 
     public List<Frete> getFretes() {
