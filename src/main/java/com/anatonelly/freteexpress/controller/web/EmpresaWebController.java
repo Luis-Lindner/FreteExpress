@@ -24,12 +24,9 @@ public class EmpresaWebController {
         List<Motorista> motoristas = motoristaService.listar();
 
         // Mapa para associar motorista ID com a string das estrelas
-        // A chave do mapa deve ser Integer (tipo de idMotorista)
-        Map<Integer, String> estrelasMap = new HashMap<>(); // <<<<< CORRIGIDO AQUI: Long para Integer
+        Map<Long, String> estrelasMap = new HashMap<>();
         for (Motorista m : motoristas) {
-            // <<<<< CORRIGIDO AQUI: m.getId() para m.getIdMotorista()
-            // <<<<< CORRIGIDO AQUI: m.getAvaliacao() (que já estava correto, mas reforçado)
-            estrelasMap.put(m.getIdMotorista(), gerarEstrelas(m.getAvaliacao()));
+            estrelasMap.put(m.getId(), gerarEstrelas(m.getAvaliacao()));
         }
 
         model.addAttribute("motoristas", motoristas);

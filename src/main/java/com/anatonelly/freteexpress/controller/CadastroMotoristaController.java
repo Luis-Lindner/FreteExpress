@@ -45,12 +45,7 @@ public class CadastroMotoristaController {
         System.out.println("Ano: " + ano);
         System.out.println("Tipo de Veículo: " + tipo);
 
-        // Redireciona para a página de login
+        // Redireciona para a página de login após o cadastro
         return new ModelAndView("redirect:/login");
-    }
-
-    @GetMapping("/login")
-    public ModelAndView showLogin() {
-        return new ModelAndView("loginMotorista");
     }
 }

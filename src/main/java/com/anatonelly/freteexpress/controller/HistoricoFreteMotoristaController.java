@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Optional; // Import para Optional
 
 @Controller
 @RequestMapping("/motorista/historico")
@@ -36,11 +35,7 @@ public class HistoricoFreteMotoristaController {
 
         // Recupera o motorista com base no username (email ou outro identificador)
         String username = auth.getName(); // Geralmente o email ou username
-
-        // CORRIGIDO: Trata o Optional retornado por findByEmail()
-        // Usa orElse(null) para que 'motorista' seja null se não encontrado,
-        // o que corresponde à lógica de verificação subsequente.
-        Motorista motorista = motoristaService.findByEmail(username).orElse(null);
+        Motorista motorista = motoristaService.findByEmail(username); // Ajuste conforme o campo de autenticação
 
         if (motorista == null) {
             model.addAttribute("error", "Motorista não encontrado para o usuário logado.");

@@ -1,0 +1,120 @@
+:root {
+    --cor-fundo-geral: #141E30;
+    --cor-fundo-conteudo: #1f3655;
+    --cor-amarelo-principal: #fdb827;
+    --cor-texto-claro: #ffffff;
+    --cor-texto-cinza: #adb5bd;
+    --cor-borda-input: #495057;
+    --cor-sidebar-bg: #f8f9fa;
+    --cor-sidebar-texto: #343a40;
+}
+
+/* Regra 1: Garante que a página pode ocupar 100% da altura */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Regra 2: Organiza a página em uma coluna (topo e conteúdo principal) */
+body {
+    background-color: var(--cor-fundo-geral);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Barra do Topo (não precisa se esticar) */
+.top-bar {
+    background-color: var(--cor-fundo-conteudo);
+    color: var(--cor-texto-claro);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--cor-amarelo-principal);
+    flex-shrink: 0;
+}
+.top-bar .logo { font-size: 1.5rem; font-weight: bold; }
+
+/* Regra 3: O container principal 'cresce' para preencher o resto da tela */
+.main-container {
+    display: flex;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    flex-grow: 1;
+}
+
+.content { flex-grow: 1; }
+
+/* Sidebar da Empresa (Clara) */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background-color: var(--cor-sidebar-bg);
+    padding: 1rem;
+    border-radius: 8px;
+}
+.sidebar .nav-link {
+    color: var(--cor-sidebar-texto);
+    font-size: 1.1rem;
+    border-radius: 6px;
+}
+.sidebar .nav-link i { color: var(--cor-fundo-conteudo); margin-right: 1rem; }
+.sidebar .nav-link.active {
+    background-color: var(--cor-amarelo-principal);
+    color: var(--cor-texto-escuro);
+    font-weight: bold;
+}
+.sidebar .nav-link.active i { color: var(--cor-texto-escuro); }
+
+/* Estilos para o Formulário de Múltiplos Passos */
+.form-step-container {
+    background-color: var(--cor-fundo-conteudo);
+    padding: 2rem 3rem;
+    border-radius: 8px;
+    color: var(--cor-texto-claro);
+}
+.step-indicator { text-align: right; margin-bottom: 1rem; }
+.step-indicator .step {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: var(--cor-borda-input);
+    color: var(--cor-texto-claro);
+    margin-left: 8px;
+    border: 1px solid var(--cor-texto-cinza);
+    font-size: 0.9rem;
+}
+.step-indicator .step.active {
+    background-color: var(--cor-amarelo-principal);
+    color: var(--cor-texto-escuro);
+    font-weight: bold;
+    border: none;
+}
+.form-step-container h2 {
+    font-weight: 300;
+    border-bottom: 1px solid var(--cor-borda-input);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+.form-step-container .form-label {
+    font-weight: bold;
+    color: var(--cor-texto-cinza);
+}
+.form-step-container .form-control {
+    background-color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+}
+.btn-continuar {
+    background-color: var(--cor-amarelo-principal);
+    color: var(--cor-texto-escuro);
+    font-weight: bold;
+    border: none;
+    padding: 0.5rem 2rem;
+}

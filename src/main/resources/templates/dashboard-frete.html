@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Dashboard de Fretes</title>
+  <link rel="stylesheet" th:href="@{/css/estilosEmpresa.css}">
+</head>
+<body>
+<header class="top-bar"></header>
+<div class="main-container">
+  <aside class="sidebar sidebar-clara">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/empresa/home}" th:classappend="${activePage == 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/empresa/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}"><i class="bi bi-truck"></i> Fretes</a>
+      </li>
+    </ul>
+  </aside>
+  <main class="content">
+  </main>
+</div>
+</body>
+</html>

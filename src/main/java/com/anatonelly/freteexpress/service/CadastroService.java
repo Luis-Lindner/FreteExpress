@@ -8,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional; // Certifique-se que Optional está importado
-
 @Service
 public class CadastroService {
 
@@ -30,27 +28,14 @@ public class CadastroService {
 
     @Transactional
     public void cadastrarNovaEmpresa(CadastroEmpresaDTO dto) {
-        // Agora findByNome retorna Optional, permitindo o uso de orElseGet
         Pais pais = paisRepository.findByNome(dto.getPaisNome())
                 .orElseGet(() -> paisRepository.save(new Pais(dto.getPaisNome())));
 
-        // Estado agora aceita um objeto Pais completo no construtor ou setter
         Estado estado = estadoRepository.findByNome(dto.getEstadoNome())
-                .orElseGet(() -> {
-                    Estado novoEstado = new Estado();
-                    novoEstado.setNome(dto.getEstadoNome());
-                    novoEstado.setPais(pais); // Garante que o País seja setado
-                    return estadoRepository.save(novoEstado);
-                });
+                .orElseGet(() -> estadoRepository.save(new Estado(dto.getEstadoNome(), pais)));
 
-        // Cidade agora aceita um objeto Estado completo no construtor ou setter
         Cidade cidade = cidadeRepository.findByNome(dto.getCidadeNome())
-                .orElseGet(() -> {
-                    Cidade novaCidade = new Cidade();
-                    novaCidade.setNome(dto.getCidadeNome());
-                    novaCidade.setEstado(estado); // Garante que o Estado seja setado
-                    return cidadeRepository.save(novaCidade);
-                });
+                .orElseGet(() -> cidadeRepository.save(new Cidade(dto.getCidadeNome(), estado)));
 
         Endereco endereco = new Endereco();
         endereco.setRua(dto.getRua());
@@ -60,15 +45,11 @@ public class CadastroService {
         endereco.setCidade(cidade);
 
         try {
-            // Se o número estiver em branco ou null, não tente parsear
             if (dto.getNumero() != null && !dto.getNumero().trim().isEmpty()) {
                 endereco.setNumero(Integer.parseInt(dto.getNumero()));
-            } else {
-                endereco.setNumero(null); // Define como null se não for fornecido ou for inválido
             }
         } catch (NumberFormatException e) {
             System.err.println("AVISO: O número de endereço fornecido não é um inteiro válido: '" + dto.getNumero() + "'");
-            endereco.setNumero(null); // Define como null em caso de erro de conversão
         }
 
         EmpresaCliente empresa = new EmpresaCliente();
@@ -77,8 +58,6 @@ public class CadastroService {
         empresa.setSenha(passwordEncoder.encode(dto.getSenha()));
         empresa.setCnpj(dto.getCnpj());
         empresa.setEndereco(endereco);
-        // Os demais campos (descricao, telefone, site, imagemPerfil) não estão no DTO ou sendo setados aqui
-        // Se eles forem necessários e forem nulos, o Hibernate pode reclamar se a coluna for NOT NULL
 
         empresaClienteRepository.save(empresa);
     }

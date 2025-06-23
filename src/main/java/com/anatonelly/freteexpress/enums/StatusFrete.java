@@ -1,10 +1,9 @@
-// Crie este novo arquivo: src/main/java/com/anatonelly/freteexpress/model/StatusFrete.java
 package com.anatonelly.freteexpress.enums;
 
 public enum StatusFrete {
-    PENDENTE,      // Aguardando um motorista solicitar
-    SOLICITADO,    // Um motorista solicitou, aguardando aprovação da empresa
-    EM_ANDAMENTO,  // Frete sendo realizado
-    FINALIZADO,    // Frete concluído com sucesso
-    CANCELADO      // Frete foi cancelado
+    PENDENTE,   // Disponível para todos os motoristas
+    SOLICITADO, // Um motorista demonstrou interesse, aguardando aprovação da empresa
+    ACEITO,     // Empresa aprovou, frete em andamento com um motorista
+    FINALIZADO, // Frete concluído com sucesso
+    CANCELADO   // Frete foi cancelado
 }
