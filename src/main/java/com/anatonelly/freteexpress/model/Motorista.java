@@ -26,15 +26,14 @@ public class Motorista {
     @Column(unique = true)
     private String cnh;
 
-    
     @OneToMany(mappedBy = "motoristaSolicitante")
     private List<Frete> fretes;
 
-
+    // Construtor padrão
     public Motorista() {
     }
 
-
+    // --- Getters e Setters ---
 
     public Long getId() {
         return id;
