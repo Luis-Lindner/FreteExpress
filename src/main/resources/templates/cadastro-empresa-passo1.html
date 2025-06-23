@@ -23,8 +23,7 @@
         <h2>Cadastro Empresa</h2>
         <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
 
-        <!-- Adicionado th:object para Endereco também no formulário, para mapear campos -->
-        <form th:action="@{/cadastro/empresa/passo1}" th:object="${empresa}" method="post">
+        <form th:action="@{/cadastro/empresa/passo1}" th:object="${empresaCliente}" method="post"> <!-- Alterado th:object -->
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" th:field="*{email}" required>
@@ -45,28 +44,28 @@
             </div>
             <div class="form-group">
                 <label for="rua">Endereço (Rua)</label>
-                <input type="text" id="rua" th:field="*{endereco.rua}" required> <!-- Mapeia para endereco.rua -->
+                <input type="text" id="rua" th:field="*{endereco.rua}" required>
             </div>
             <div class="form-group">
                 <label for="numero">Número</label>
-                <input type="text" id="numero" th:field="*{endereco.numero}" required> <!-- Mapeia para endereco.numero -->
+                <input type="text" id="numero" th:field="*{endereco.numero}" required>
             </div>
             <div class="form-group">
                 <label for="bairro">Bairro</label>
-                <input type="text" id="bairro" th:field="*{endereco.bairro}" required> <!-- Mapeia para endereco.bairro -->
+                <input type="text" id="bairro" th:field="*{endereco.bairro}" required>
             </div>
             <div class="form-group">
                 <label for="cep">CEP</label>
-                <input type="text" id="cep" th:field="*{endereco.cep}" required> <!-- Mapeia para endereco.cep -->
+                <input type="text" id="cep" th:field="*{endereco.cep}" required>
             </div>
             <div class="form-row">
                 <div class="form-group half">
                     <label for="cidade">Cidade</label>
-                    <input type="text" id="cidade" th:field="*{endereco.cidade.nome}" required> <!-- Mapeia para endereco.cidade.nome -->
+                    <input type="text" id="cidade" th:field="*{endereco.cidade.nome}" required>
                 </div>
                 <div class="form-group half">
                     <label for="estado">Estado</label>
-                    <input type="text" id="estado" th:field="*{endereco.cidade.estado.nome}" required> <!-- Mapeia para endereco.cidade.estado.nome -->
+                    <input type="text" id="estado" th:field="*{endereco.cidade.estado.nome}" required>
                 </div>
             </div>
             <div class="form-actions-bottom">

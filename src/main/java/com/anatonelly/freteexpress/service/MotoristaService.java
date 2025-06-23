@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional; // Import para Optional
 
 @Service
 // Ao implementar UserDetailsService, esta classe se torna a ponte entre seus usuários e o Spring Security.
@@ -58,10 +59,10 @@ public class MotoristaService implements UserDetailsService {
      * Busca um motorista específico pelo seu endereço de email.
      * Usado por outros serviços ou controllers que precisam encontrar um motorista.
      * @param email O email a ser buscado.
-     * @return O objeto Motorista se encontrado, ou null caso contrário.
+     * @return O objeto Motorista se encontrado, encapsulado em um Optional.
      */
-    public Motorista findByEmail(String email) {
-        return motoristaRepository.findByEmail(email).orElse(null);
+    public Optional<Motorista> findByEmail(String email) { // Retorna Optional para melhor tratamento de nulls
+        return motoristaRepository.findByEmail(email);
     }
 
     /**
@@ -73,6 +74,7 @@ public class MotoristaService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Usa o método findByEmail que retorna Optional
         Motorista motorista = motoristaRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o email: " + username));
 

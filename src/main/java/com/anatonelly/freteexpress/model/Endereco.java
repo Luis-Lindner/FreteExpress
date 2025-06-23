@@ -1,48 +1,37 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "enderecos")
+@Table(name = "Endereco") // Nome da tabela no DB
+@Data
+@NoArgsConstructor
 public class Endereco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_endereco") // Mapeia para id_endereco no DB (INT)
+    private Integer idEndereco;
 
-    private String rua;
-    private Integer numero; // <-- Verifique se o tipo está como Integer
-    private String bairro;
-    private String cep;
-    private String complemento;
-
-    @ManyToOne
-    @JoinColumn(name = "cidade_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cidade") // Mapeia para id_cidade no DB (INT)
     private Cidade cidade;
 
-    public Endereco() {
-    }
-    
-    // Getters e Setters
+    @Column(name = "rua", length = 45)
+    private String rua;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Column(name = "numero")
+    private Integer numero;
 
-    public String getRua() { return rua; }
-    public void setRua(String rua) { this.rua = rua; }
+    @Column(name = "bairro", length = 45)
+    private String bairro;
 
-    public Integer getNumero() { return numero; }
-    public void setNumero(Integer numero) { this.numero = numero; }
+    @Column(name = "cep", length = 45)
+    private String cep;
 
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
-
-    public String getCep() { return cep; }
-    public void setCep(String cep) { this.cep = cep; }
-
-    public String getComplemento() { return complemento; }
-    public void setComplemento(String complemento) { this.complemento = complemento; }
-
-    public Cidade getCidade() { return cidade; }
-    public void setCidade(Cidade cidade) { this.cidade = cidade; }
+    @Column(name = "complemento", length = 45)
+    private String complemento;
 }
+    

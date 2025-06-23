@@ -13,12 +13,5 @@ import java.util.List;
 public interface FreteRepository extends JpaRepository<Frete, Long> {
 
     List<Frete> findByMotoristaSolicitanteAndStatus(Motorista motorista, StatusFrete status);
-
     List<Frete> findByEmpresaClienteOrderByPrazoEntregaDesc(EmpresaCliente empresaCliente);
-
-    List<Frete> findByStatus(StatusFrete status);
-
-    long countByStatus(StatusFrete status);
-
-    List<Frete> findByStatusAndTipoCargaContainingIgnoreCase(StatusFrete status, String pesquisa);
 }

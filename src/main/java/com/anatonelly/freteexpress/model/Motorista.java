@@ -26,32 +26,15 @@ public class Motorista {
     @Column(unique = true)
     private String cnh;
 
+    
     @OneToMany(mappedBy = "motoristaSolicitante")
     private List<Frete> fretes;
 
-    // --- CÓDIGO QUE ESTAVA FALTANDO ---
-
-    /**
-     * Campo temporário para a lógica da tela.
-     * A anotação @Transient impede que o JPA tente criar uma coluna para ele no banco.
-     */
-    @Transient
-    private String statusPagamento;
-
-    /**
-     * Campo temporário para a lógica da tela.
-     */
-    @Transient
-    private int avaliacao;
-
-    // --- FIM DO CÓDIGO FALTANTE ---
-
 
     public Motorista() {
-        // Construtor padrão
     }
 
-    // --- GETTERS E SETTERS ---
+
 
     public Long getId() {
         return id;
@@ -107,23 +90,5 @@ public class Motorista {
 
     public void setFretes(List<Frete> fretes) {
         this.fretes = fretes;
-    }
-
-    // --- GETTERS E SETTERS QUE ESTAVAM FALTANDO ---
-
-    public String getStatusPagamento() {
-        return statusPagamento;
-    }
-
-    public void setStatusPagamento(String statusPagamento) {
-        this.statusPagamento = statusPagamento;
-    }
-
-    public int getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(int avaliaco) {
-        this.avaliacao = avaliaco;
     }
 }

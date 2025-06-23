@@ -1,44 +1,50 @@
 package com.anatonelly.freteexpress.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "empresas_cliente")
+@Table(name = "Empresa") // Nome da tabela no DB
+@Data
+@NoArgsConstructor
 public class EmpresaCliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_empresa") // Mapeia para id_empresa no DB (INT)
+    private Integer idEmpresa;
 
-    private String nome;
-    private String email;
-    private String senha;
-    private String cnpj;
-
-    @OneToOne(cascade = CascadeType.ALL) // Salva o endereço junto com a empresa
-    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_endereco") // Mapeia para id_endereco no DB (INT)
     private Endereco endereco;
 
-    public EmpresaCliente() {
-    }
-    
-    // Getters e Setters
+    @Column(name = "nome", length = 100)
+    private String nome;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Column(name = "razao_social", length = 100) // Mapeia para razao_social no DB
+    private String razaoSocial;
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    @Column(name = "cnpj", length = 14)
+    private String cnpj;
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    @Column(name = "email", length = 45)
+    private String email;
 
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
+    @Column(name = "senha", length = 255)
+    private String senha;
 
-    public String getCnpj() { return cnpj; }
-    public void setCnpj(String cnpj) { this.cnpj = cnpj; }
+    @Column(name = "descricao", length = 200)
+    private String descricao;
 
-    public Endereco getEndereco() { return endereco; }
-    public void setEndereco(Endereco endereco) { this.endereco = endereco; }
+    @Column(name = "telefone", length = 12)
+    private String telefone;
+
+    @Column(name = "site", length = 300)
+    private String site;
+
+    @Lob
+    @Column(name = "imagem_perfil") // Mapeia para imagem_perfil no DB
+    private byte[] imagemPerfil;
 }
+    
