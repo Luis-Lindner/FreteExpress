@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
@@ -14,20 +14,21 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // Mantém o encoder para criptografia
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                // ESTA LINHA PERMITE ACESSO A QUALQUER URL SEM LOGIN
-                .requestMatchers("/**").permitAll() 
-            )
-            // Desativar a proteção CSRF pode ser útil para testar formulários com Postman,
-            // mas lembre-se de reativar para produção.
-            .csrf(csrf -> csrf.disable()); 
-            
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll() // Permite acesso a todas as rotas sem autenticação
+                )
+                .formLogin(form -> form
+                        .disable() // Desativa o formulário de login
+                )
+                .logout(logout -> logout
+                        .disable() // Desativa o logout
+                );
         return http.build();
     }
 }
