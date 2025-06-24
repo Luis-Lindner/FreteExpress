@@ -26,7 +26,6 @@ public class FreteService {
         return freteRepository.findAll();
     }
 
-    // Corrigido para usar Long, correspondendo ao tipo do ID da entidade Frete
     public Optional<Frete> buscarPorId(Long id) {
         return freteRepository.findById(id);
     }
@@ -35,7 +34,6 @@ public class FreteService {
         return freteRepository.save(frete);
     }
 
-    // Corrigido para usar Long
     public boolean deletar(Long id) {
         if (freteRepository.existsById(id)) {
             freteRepository.deleteById(id);
@@ -44,10 +42,8 @@ public class FreteService {
         return false;
     }
 
-    // Corrigido para usar Long
     public Optional<Frete> atualizar(Long id, Frete freteAtualizado) {
         return freteRepository.findById(id).map(freteExistente -> {
-            // A lógica de atualização dos campos permanece aqui
             freteExistente.setOrigem(freteAtualizado.getOrigem());
             freteExistente.setDestino(freteAtualizado.getDestino());
             freteExistente.setTipoCarga(freteAtualizado.getTipoCarga());
@@ -71,9 +67,7 @@ public class FreteService {
         return freteRepository.findByEmpresaClienteOrderByPrazoEntregaDesc(empresaCliente);
     }
 
-    // Corrigido para usar Long para ambos os IDs
-    // CORREÇÃO FINAL: O ID do frete é Long, e o ID do motorista é Integer.
-    public boolean solicitarFrete(Long freteId, Integer motoristaId) {
+    public boolean solicitarFrete(Long freteId, Long motoristaId) {
         Optional<Frete> freteOpt = freteRepository.findById(freteId);
         Optional<Motorista> motoristaOpt = motoristaRepository.findById(motoristaId);
 

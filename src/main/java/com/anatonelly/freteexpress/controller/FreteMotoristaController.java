@@ -2,14 +2,16 @@ package com.anatonelly.freteexpress.controller;
 
 import com.anatonelly.freteexpress.model.Frete;
 import com.anatonelly.freteexpress.model.Motorista;
-import com.anatonelly.freteexpress.repository.FreteRepository;
-import com.anatonelly.freteexpress.repository.MotoristaRepository;
 import com.anatonelly.freteexpress.service.FreteService;
+import com.anatonelly.freteexpress.service.MotoristaService; // Importe o MotoristaService
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication; // Importe a classe Authentication
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +20,12 @@ import java.util.Optional;
 public class FreteMotoristaController {
 
     private final FreteService freteService;
-    private final MotoristaRepository motoristaRepository;
+    private final MotoristaService motoristaService; // Use o Service em vez do Repository
 
-    public FreteMotoristaController(FreteService freteService, MotoristaRepository motoristaRepository) {
+    @Autowired
+    public FreteMotoristaController(FreteService freteService, MotoristaService motoristaService) {
         this.freteService = freteService;
-        this.motoristaRepository = motoristaRepository;
+        this.motoristaService = motoristaService;
     }
 
     @GetMapping("/motorista/fretes")
@@ -33,28 +36,35 @@ public class FreteMotoristaController {
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar fretes: " + e.getMessage());
         }
-        return "fretesMotorista";
+        return "freteMotorista"; // Corrigido para "freteMotorista" que é o nome do seu template
     }
 
     @PostMapping("/motorista/solicitar-frete")
-    public String solicitarFrete(@RequestParam Long freteId, Model model) {
+    public String solicitarFrete(@RequestParam Long freteId, RedirectAttributes redirectAttributes, Authentication authentication) {
+        // 1. Verifica se o usuário está autenticado
+        if (authentication == null || !authentication.isAuthenticated()) {
+            redirectAttributes.addFlashAttribute("error", "Você precisa estar logado para solicitar um frete.");
+            return "redirect:/login";
+        }
+
         try {
-            // Simulação: Motorista logado com ID 1. O tipo do ID é Integer.
-            // Corrigido de 1L (Long) para 1 (int/Integer).
-            Optional<Motorista> motoristaOpt = motoristaRepository.findById(1);
+            // 2. Pega o email do usuário logado
+            String email = authentication.getName();
+            Optional<Motorista> motoristaOpt = motoristaService.findByEmail(email);
 
             if (motoristaOpt.isPresent()) {
-                // Chamada ao serviço corrigida para passar (Long, Integer).
-                if (freteService.solicitarFrete(freteId, 1)) {
-                    model.addAttribute("message", "Frete solicitado com sucesso!");
+                Motorista motoristaLogado = motoristaOpt.get();
+                // 3. Chama o serviço com o ID dinâmico do motorista logado
+                if (freteService.solicitarFrete(freteId, motoristaLogado.getId())) {
+                    redirectAttributes.addFlashAttribute("message", "Frete solicitado com sucesso!");
                 } else {
-                    model.addAttribute("error", "Frete não disponível para solicitação.");
+                    redirectAttributes.addFlashAttribute("error", "Frete não disponível para solicitação.");
                 }
             } else {
-                model.addAttribute("error", "Motorista não encontrado.");
+                redirectAttributes.addFlashAttribute("error", "Motorista não encontrado.");
             }
         } catch (Exception e) {
-            model.addAttribute("error", "Erro ao solicitar frete: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Erro ao solicitar frete: " + e.getMessage());
         }
         return "redirect:/motorista/fretes";
     }

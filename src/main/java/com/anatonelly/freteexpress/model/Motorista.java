@@ -26,6 +26,20 @@ public class Motorista {
     @Column(unique = true)
     private String cnh;
 
+    @Column(length = 15)
+    private String celular;
+
+    @Lob
+    @Column(name = "foto", columnDefinition = "LONGBLOB")
+    private byte[] foto;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco", referencedColumnName = "id_endereco")
+    private Endereco endereco;
+
+    @OneToOne(mappedBy = "motorista", cascade = CascadeType.ALL)
+    private Veiculo veiculo;
+
     @OneToMany(mappedBy = "motoristaSolicitante")
     private List<Frete> fretes;
 
@@ -81,6 +95,38 @@ public class Motorista {
 
     public void setCnh(String cnh) {
         this.cnh = cnh;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Veiculo getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(Veiculo veiculo) {
+        this.veiculo = veiculo;
     }
 
     public List<Frete> getFretes() {
